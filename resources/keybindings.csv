@@ -1,0 +1,505 @@
+kill-current-buffer, s-k
+shrink-window-if-larger-than-buffer, C-x -
+end-of-buffer-other-window, M-<end>
+next-buffer, C-x <right>
+project-find-regexp, C-x p g
+scroll-left, C-x <
+xref-find-definitions-other-frame, C-x 5 .
+compose-last-chars, <compose-last-chars>
+info-lookup-symbol, C-h S
+downcase-region, C-x C-l
+forward-sentence, M-e
+complete-symbol, C-M-i
+unhighlight-regexp, M-s h u
+forward-paragraph, M-}
+ns-respond-to-change-font, <ns-change-font>
+mouse-set-region, <drag-mouse-1>
+bookmark-set, C-x r m
+delete-indentation, M-^
+backward-word, M-b
+inverse-add-global-abbrev, C-x a -
+kmacro-to-register, C-x C-k x
+ns-paste-secondary, s-y
+dired-jump, C-x C-j
+forward-list, C-M-n
+save-buffers-kill-terminal, C-x C-c
+project-or-external-find-file, C-x p F
+copy-rectangle-to-register, C-x r r
+comment-line, C-x C-;
+rename-buffer, C-x x r
+kill-some-buffers, s-^
+customize, <ns-show-prefs>
+mouse-yank-secondary, M-<mouse-2>
+describe-key, C-h k
+display-buffer-other-frame, C-x 5 C-o
+beginning-of-buffer-other-window, M-<begin>
+list-directory, C-x C-d
+tab-rename, C-x t r
+font-lock-update, C-x x f
+vc-log-mergebase, C-x v M L
+recenter-top-bottom, C-l
+find-file-other-window, C-x 4 C-f
+mouse-drag-bottom-right-corner, <bottom-right-corner> <down-mouse-1>
+beginning-of-buffer, M-<
+dired-other-window, C-x 4 d
+frameset-to-register, C-x r f
+reposition-window, C-M-l
+copy-to-register, C-x r x
+vc-log-outgoing, C-x v O
+forward-char, C-f
+set-input-method, C-x RET C-\
+kmacro-add-counter, C-x C-k C-a
+ido-dired, C-x d
+xref-find-references, M-?
+bookmark-bmenu-list, C-x r l
+ido-display-buffer-other-frame, C-x 5 C-o
+tab-close, C-x t 0
+same-window-prefix, C-x 4 1
+vc-merge, C-x v m
+forward-sexp, C-M-f
+backward-list, C-M-p
+enlarge-window, C-x ^
+eval-last-sexp, C-x C-e
+mouse-drag-bottom-left-corner, <bottom-left-corner> <down-mouse-1>
+yank, C-y
+kmacro-end-call-mouse, S-<mouse-3>
+help-quit, C-h q
+buffer-menu-open, C-<f10>
+delete-frame, C-x 5 0
+upcase-word, M-u
+tab-duplicate, C-x t n
+handle-delete-frame, <delete-frame>
+ido-find-file-read-only-other-frame, C-x 5 r
+tab-to-tab-stop, M-i
+delete-other-frames, C-x 5 1
+help-with-tutorial, C-h t
+highlight-phrase, M-s h p
+recenter-other-window, C-M-S-l
+default-indent-new-line, C-M-j
+other-tab-prefix, C-x t t
+insert-buffer, C-x x i
+mark-defun, C-M-h
+find-file-read-only-other-window, C-x 4 r
+clone-buffer, C-x x n
+next-line, C-n
+revert-buffer-with-coding-system, C-x RET r
+handle-select-window, <select-window>
+capitalize-word, M-c
+xref-find-definitions, M-.
+describe-command, C-h x
+backward-page, C-x [
+transpose-lines, C-x C-t
+overwrite-mode, <insertchar>
+scroll-right, C-x >
+forward-page, C-x ]
+find-alternate-file, C-x C-v
+vc-push, C-x v P
+kmacro-bind-to-key, C-x C-k b
+magit-file-dispatch, C-c M-g
+help-for-help, C-h ?
+expand-jump-to-next-slot, C-x a n
+ido-switch-buffer, C-x C-b
+mouse-drag-region-rectangle, C-M-<down-mouse-1>
+xref-find-apropos, C-M-.
+describe-bindings, C-h b
+revert-buffer, s-u
+xref-pop-marker-stack, M-,
+ns-spi-service-call, <ns-spi-service-call>
+mark-word, M-@
+info, C-h i
+kill-sexp, C-M-k
+describe-mode, C-h m
+universal-argument, C-u
+isearch-forward-thing-at-point, M-s M-.
+electric-newline-and-maybe-indent, C-j
+tab-undo, C-x t u
+find-file-read-only-other-frame, C-x 5 r
+ido-display-buffer, C-x 4 C-o
+switch-to-buffer, C-x C-b
+backward-sentence, M-a
+kill-rectangle, C-x r k
+describe-symbol, C-h o
+find-file-other-tab, C-x t C-f
+widen, C-x n w
+copy-rectangle-as-kill, C-x r M-w
+count-words-region, M-=
+handle-switch-frame, <switch-frame>
+mark-page, C-x C-p
+find-file-read-only-other-tab, C-x t C-r
+add-global-abbrev, C-x a g
+search-forward-help-for-help, C-h C-s
+project-shell-command, C-x p !
+backward-sexp, C-M-b
+kill-buffer, C-x k
+project-switch-project, C-x p p
+describe-function, C-h f
+insert-parentheses, M-(
+dired-sidebar-toggle-sidebar, M-l
+scroll-up-command, C-v
+compose-mail, C-x m
+async-shell-command, M-&
+project-compile, C-x p c
+narrow-to-region, C-x n n
+ignore, C-M-<drag-mouse-1>
+split-window-right, C-x 3
+other-window-prefix, C-x 4 4
+search-forward, <find>
+ns-toggle-toolbar, <ns-toggle-toolbar>
+point-to-register, C-x r SPC
+set-buffer-file-coding-system, C-x RET f
+display-local-help, C-h .
+execute-extended-command, M-x
+describe-distribution, C-h C-o
+mouse-drag-bottom-edge, <bottom-edge> <down-mouse-1>
+newline, RET
+yank-pop, M-y
+finder-by-keyword, C-h p
+shell-command, M-!
+switch-to-buffer-other-window, C-x 4 b
+switch-to-buffer-other-tab, C-x t b
+delete-backward-char, DEL
+kill-line, C-k
+save-some-buffers, C-x s
+mouse-split-window-horizontally, <bottom-divider> C-<mouse-2>
+enlarge-window-horizontally, C-x }
+highlight-regexp, M-s h r
+rectangle-number-lines, C-x r N
+mouse-drag-vertical-line, <right-divider> <down-mouse-1>
+dired-other-tab, C-x t d
+kmacro-name-last-macro, C-x C-k n
+project-async-shell-command, C-x p &
+abort-recursive-edit, C-]
+insert-register, C-x r g
+apropos-documentation, C-h d
+notes, C-'
+dired, C-x d
+ido-dired-other-frame, C-x 5 d
+self-insert-command, SPC..:
+kmacro-set-counter, C-x C-k C-c
+ido-find-file-other-window, C-x 4 C-f
+kill-ring-save, M-w
+vc-print-log, C-x v l
+project-find-dir, C-x p d
+mouse-buffer-menu, C-<down-mouse-1>
+toggle-truncate-lines, C-x x t
+vc-update, C-x v +
+mouse-drag-top-right-corner, <top-right-corner> <down-mouse-1>
+ido-dired-other-window, C-x 4 d
+apply-macro-to-region-lines, C-x C-k r
+info-display-manual, C-h R
+yank-rectangle, C-x r y
+kmacro-redisplay, C-x C-k d
+comment-set-column, C-x ;
+suspend-frame, C-z
+highlight-lines-matching-regexp, M-s h l
+execute-extended-command-for-buffer, M-X
+left-word, C-<left>
+vc-retrieve-tag, C-x v r
+manual-entry, s-M
+count-lines-page, C-x l
+right-word, C-<right>
+kmacro-insert-counter, C-x C-k TAB
+add-change-log-entry-other-window, C-x 4 a
+project-shell, C-x p s
+find-file-read-only, C-x C-r
+tab-move-to, C-x t M
+project-other-tab-command, C-x t p
+keyboard-escape-quit, M-ESC ESC
+split-line, C-M-o
+undo-redo, C-M-_
+hi-lock-find-patterns, M-s h f
+dired-other-frame, C-x 5 d
+delete-horizontal-space, M-\
+vc-region-history, C-x v h
+ns-prev-frame, s-~
+mouse-drag-right-edge, <right-edge> <down-mouse-1>
+about-emacs, C-h C-a
+delete-blank-lines, C-x C-o
+ido-insert-file, C-x i
+universal-coding-system-argument, C-x RET c
+edit-kbd-macro, C-x C-k e
+move-to-window-line-top-bottom, M-r
+mouse-drag-region, <down-mouse-1>
+window-configuration-to-register, C-x r w
+scroll-lock-mode, <Scroll_Lock>
+open-rectangle, C-x r o
+isearch-repeat-forward, s-g
+clone-indirect-buffer-other-window, C-x 4 c
+ido-switch-buffer-other-window, C-x 4 b
+set-fill-prefix, C-x .
+mouse-secondary-save-then-kill, M-<mouse-3>
+edit-abbrevs, s-E
+mouse-wheel-text-scale, C-<wheel-down>
+kmacro-start-macro-or-insert-counter, <f3>
+set-file-name-coding-system, C-x RET F
+mouse-save-then-kill, S-<mouse-1>
+toggle-frame-fullscreen, <f11>
+make-frame-command, C-x 5 2
+mouse-drag-top-edge, <top-edge> <down-mouse-1>
+compose-mail-other-frame, C-x 5 m
+repeat, C-x z
+kill-sentence, M-k
+open-line, <insertline>
+ns-do-hide-emacs, s-h
+move-beginning-of-line, C-a
+project-other-frame-command, C-x 5 p
+quoted-insert, C-q
+vc-switch-backend, C-x v b
+kmacro-swap-ring, C-x C-k C-t
+tab-new, C-x t 2
+mouse-set-point, <mouse-1>
+kmacro-delete-ring-head, C-x C-k C-d
+mouse-set-secondary, M-<drag-mouse-1>
+narrow-to-page, C-x n p
+magit-dispatch, C-x M-g
+kmacro-set-format, C-x C-k C-f
+ns-do-hide-others, s-H
+vc-revert, C-x v u
+Info-goto-emacs-command-node, C-h F
+query-replace, M-%
+magit-status, C-x g
+text-scale-adjust, s-0
+my-other-window, C-o
+calc-dispatch, C-x *
+project-or-external-find-regexp, C-x p G
+view-echo-area-messages, C-h e
+bookmark-jump, C-x r b
+isearch-forward-symbol, M-s _
+keyboard-quit, C-g
+mouse-drag-top-left-corner, <top-left-corner> <down-mouse-1>
+occur, M-s o
+move-end-of-line, C-e
+narrow-to-defun, C-x n d
+ns-print-buffer, s-p
+set-keyboard-coding-system, C-x RET k
+describe-language-environment, C-h L
+ido-list-directory, C-x C-d
+ido-insert-buffer, C-x x i
+kill-word, M-d
+view-emacs-debugging, C-h C-d
+set-mark-command, C-SPC
+digit-argument, C-9
+shell-command-on-region, M-|
+god-mode-all, ;
+zap-to-char, M-z
+backward-char, C-b
+indent-region, C-M-\
+where-is, C-h w
+ido-find-alternate-file, C-x C-v
+delete-window, C-x 0
+set-selection-coding-system, C-x RET x
+activate-transient-input-method, C-x \
+scroll-bar-toolkit-scroll, <vertical-scroll-bar> <down-mouse-1>
+back-to-indentation, M-m
+tab-next, C-x t o
+append-next-kill, C-M-w
+mark-whole-buffer, C-x h
+exchange-point-and-mark, C-x C-x
+write-file, C-x C-w
+vc-create-tag, C-x v s
+vc-print-root-log, C-x v L
+info-other-window, C-h 4 i
+other-frame, C-x 5 o
+backward-kill-sexp, ESC C-<backspace>
+delete-other-windows, C-x 1
+tab-group, C-x t G
+goto-char, M-g c
+mouse-drag-left-edge, <left-edge> <down-mouse-1>
+project-eshell, C-x p e
+ido-find-file-other-frame, C-x 5 C-f
+previous-error, M-g p
+kmacro-end-or-call-macro-repeat, C-x C-k C-k
+upcase-region, C-x C-u
+mouse-select-window, <vertical-line> <mouse-1>
+set-goal-column, C-x C-n
+isearch-backward-regexp, C-M-r
+vc-diff-mergebase, C-x v M D
+expand-abbrev, C-x '
+end-of-defun, C-M-e
+ns-open-file-select-line, <ns-open-file-line>
+fill-paragraph, M-q
+vc-delete-file, C-x v x
+delete-rectangle, C-x r d
+indent-for-tab-command, TAB
+insert-file, C-x i
+project-kill-buffers, C-x p k
+not-modified, M-~
+project-find-file, C-x p f
+end-of-buffer, M->
+xref-find-definitions-other-window, C-x 4 .
+next-error, C-x `
+insert-char, C-x 8 RET
+vc-diff, C-x v =
+next-window-any-frame, s-'
+isearch-repeat-backward, s-d
+backward-kill-word, M-DEL
+indent-rigidly, C-x TAB
+tab-move, C-x t m
+tab-previous, C-x t O
+vc-register, C-x v i
+eww-search-words, M-s M-w
+kmacro-end-macro, C-x )
+balance-windows, C-x +
+string-rectangle, C-x r t
+down-list, C-M-d
+kmacro-cycle-ring-previous, C-x C-k C-p
+kmacro-end-or-call-macro, <f4>
+describe-coding-system, C-h C
+abbrev-prefix-mark, M-'
+exit-recursive-edit, C-M-c
+compose-mail-other-window, C-x 4 m
+apropos-command, C-h a
+describe-no-warranty, C-h C-w
+project-query-replace-regexp, C-x p r
+describe-syntax, C-h s
+isearch-forward-symbol-at-point, M-s .
+number-to-register, C-x r n
+describe-key-briefly, C-h c
+view-order-manuals, C-h RET
+rename-uniquely, C-x x u
+query-replace-regexp, C-M-%
+ns-copy-including-secondary, s-c
+kmacro-edit-lossage, C-x C-k l
+ido-kill-buffer, C-x k
+view-hello-file, C-h h
+mouse-split-window-vertically, <right-divider> C-<mouse-2>
+backward-kill-sentence, C-x DEL
+view-emacs-problems, C-h C-p
+vc-revision-other-window, C-x v ~
+mark-paragraph, M-h
+add-mode-abbrev, C-x a +
+transpose-sexps, C-M-t
+make-frame, <ns-new-frame>
+scroll-bar-toolkit-horizontal-scroll, <horizontal-scroll-bar> <down-mouse-1>
+ido-find-file-read-only-other-window, C-x 4 r
+scroll-other-window-down, M-<prior>
+kmacro-end-and-call-macro, C-x e
+project-switch-to-buffer, C-x p b
+move-past-close-and-reindent, M-)
+context-menu-open, S-<f10>
+view-emacs-news, C-h n
+scroll-other-window, C-M-v
+what-cursor-position, C-x =
+previous-line, C-p
+save-buffers-kill-emacs, <ns-power-off>
+shrink-window-horizontally, C-x {
+project-execute-extended-command, C-x p x
+kmacro-step-edit-macro, C-x C-k SPC
+describe-variable, C-h v
+ido-find-file-read-only, C-x C-r
+describe-input-method, C-h I
+move-to-column, M-g TAB
+goto-line-relative, C-x n g
+describe-copying, C-h C-c
+tab-close-other, C-x t 1
+save-buffer, C-x C-s
+pop-global-mark, C-x C-@
+increment-register, C-x r +
+hi-lock-write-interactive-patterns, M-s h w
+other-window, C-x o
+ns-popup-color-panel, s-C
+info-emacs-manual, C-h r
+set-terminal-coding-system, C-x RET t
+backward-paragraph, M-{
+vc-update-change-log, C-x v a
+transpose-words, M-t
+ns-find-file, <ns-open-file>
+kmacro-edit-macro, C-x C-k RET
+set-fill-column, C-x f
+2C-two-columns, C-x 6 2
+left-char, <left>
+mouse-yank-primary, <mouse-2>
+2C-associate-buffer, C-x 6 b
+comment-dwim, M-;
+find-file, C-x C-f
+vc-log-incoming, C-x v I
+ido-write-file, C-x C-w
+menu-bar-open, <f10>
+highlight-symbol-at-point, M-s h .
+describe-gnu-project, C-h g
+isearch-yank-kill, s-e
+tab-new-to, C-x t N
+mouse-start-secondary, M-<mouse-1>
+jump-to-register, C-x r j
+switch-to-buffer-other-frame, C-x 5 b
+negative-argument, M--
+view-emacs-FAQ, C-h C-f
+right-char, <right>
+toggle-input-method, C-\
+ido-find-file, C-x C-f
+tab-switch, C-x t RET
+shell, C-t
+vc-next-action, C-x v v
+kill-region, C-w
+view-external-packages, C-h C-e
+backward-up-list, C-M-u
+display-buffer, C-x 4 C-o
+ns-open-file-using-panel, s-o
+Info-goto-emacs-key-command-node, C-h K
+ispell-word, M-$
+cljs-map-to-css, C-c RET
+kmacro-view-macro-repeat, C-x C-k C-v
+delete-forward-char, <deletechar>
+inverse-add-mode-abbrev, C-x a i l
+clone-frame, C-x 5 c
+kill-whole-line, C-S-<backspace>
+toggle-frame-maximized, M-<f10>
+revert-buffer-quick, C-x x g
+clear-rectangle, C-x r c
+read-only-mode, C-x C-q
+delete-char, C-d
+kmacro-edit-macro-repeat, C-x C-k C-e
+ns-do-show-character-palette, C-s-SPC
+previous-buffer, C-x <left>
+mark-sexp, C-M-@
+describe-package, C-h P
+isearch-forward-regexp, C-M-s
+kmacro-call-ring-2nd-repeat, C-x C-k C-l
+find-file-other-frame, C-x 5 C-f
+ispell, s-:
+kbd-macro-query, C-x q
+kmacro-start-macro, C-x (
+ns-popup-font-panel, s-t
+project-dired, C-x p D
+repeat-complex-command, C-x M-:
+tmm-menubar, M-`
+mouse-drag-secondary, M-<down-mouse-1>
+scroll-down-command, M-v
+kmacro-cycle-ring-next, C-x C-k C-n
+set-buffer-process-coding-system, C-x RET p
+vc-dir, C-x v d
+forward-word, M-f
+just-one-space, M-SPC
+kill-buffer-and-window, C-x 4 0
+isearch-forward-word, M-s w
+vc-root-diff, C-x v D
+eval-expression, M-:
+ns-write-file-using-panel, s-S
+dabbrev-completion, C-M-/
+iconify-frame, s-m
+dabbrev-expand, M-/
+ns-drag-n-drop, <drag-n-drop>
+beginning-of-defun, C-M-a
+mouse-drag-mode-line, <bottom-divider> <down-mouse-1>
+project-vc-dir, C-x p v
+2C-split, C-x 6 s
+set-selective-display, C-x $
+vc-ignore, C-x v G
+set-next-selection-coding-system, C-x RET X
+dired-jump-other-window, C-x 4 C-j
+other-frame-prefix, C-x 5 5
+ido-switch-buffer-other-frame, C-x 5 b
+project-other-window-command, C-x 4 p
+goto-line, M-g g
+isearch-backward, C-r
+view-lossage, C-h l
+bookmark-set-no-overwrite, C-x r M
+set-language-environment, C-x RET l
+view-emacs-todo, C-h C-t
+mwheel-scroll, M-<wheel-right>
+expand-jump-to-previous-slot, C-x a p
+rectangle-mark-mode, C-x SPC
+undo, C-x u
+isearch-forward, C-s
+split-window-below, C-x 2
+vc-annotate, C-x v g

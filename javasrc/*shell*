@@ -1,0 +1,436 @@
+(base) sam@sams-MBP javasrc % jar cvf Huffman.jar *
+jar cvf Huffman.jar *
+added manifest
+adding: Huffman.java(in = 7382) (out= 2444)(deflated 66%)
+(base) sam@sams-MBP javasrc % pwd
+pwd
+/Users/sam/sstraust/emacskeys/javasrc
+(base) sam@sams-MBP javasrc % ls
+ls
+Huffman.jar	Huffman.java
+(base) sam@sams-MBP javasrc % cp Huffman.jar ../resources/
+cp Huffman.jar ../resources/
+(base) sam@sams-MBP javasrc % cd ../
+cd ../
+(base) sam@sams-MBP emacskeys % lein
+lein
+Leiningen is a tool for working with Clojure projects.
+
+Several tasks are available:
+change              Rewrite project.clj with f applied to the value at key-or-path.
+check               Check syntax and warn on reflection.
+classpath           Write the classpath of the current project to output-file.
+clean               Removes all files from paths in clean-targets for a project
+compile             Compile Clojure source into .class files.
+deploy              Deploy jar and pom to remote repository.
+deps                Download and examine dependencies.
+do                  Higher-order task to perform other tasks in succession.
+help                Display a list of tasks or help for a given task or subtask.
+install             Install jar and pom to the local repository; typically ~/.m2.
+jar                 Package up all the project's files into a jar file.
+javac               Compile Java source files.
+new                 Generate scaffolding for a new project based on a template.
+plugin              DEPRECATED. Please use the :user profile instead.
+pom                 Write a pom.xml file to disk for Maven interoperability.
+release             Perform release tasks.
+repl                Start a repl session either with the current project or standalone.
+retest              Run only the test namespaces which failed last time around.
+run                 Run the project's -main function.
+search              Search Central and Clojars for published artifacts.
+show-profiles       List all available profiles or display one if given an argument.
+test                Run the project's tests.
+trampoline          Run a task without nesting the project's JVM inside Leiningen's.
+uberjar             Package up the project files and all dependencies into a jar file.
+update-in           Perform arbitrary transformations on your project map.
+upgrade             Upgrade Leiningen to specified version or latest stable.
+vcs                 Interact with the version control system.
+version             Print version for Leiningen and the current JVM.
+with-profile        Apply the given task with the profile(s) specified.
+
+Run `lein help $TASK` for details.
+
+Global Options:
+  -o             Run a task offline.
+  -U             Run a task after forcing update of snapshots.
+  -h, --help     Print this help or help for a specific task.
+  -v, --version  Print Leiningen's version.
+
+These aliases are available:
+downgrade, expands to upgrade
+
+See also: readme, faq, tutorial, news, sample, profiles, deploying, gpg,
+mixed-source, templates, and copying.
+(base) sam@sams-MBP emacskeys % lein build
+lein build
+'build' is not a task. See 'lein help'.
+(base) sam@sams-MBP emacskeys % lein repl
+lein repl
+
+
+
+
+
+
+nREPL server started on port 50440 on host 127.0.0.1 - nrepl://127.0.0.1:50440
+REPL-y 0.5.1, nREPL 1.0.0
+Clojure 1.11.1
+OpenJDK 64-Bit Server VM 21.0.2
+    Docs: (doc function-name-here)
+          (find-doc "part-of-name-here")
+  Source: (source function-name-here)
+ Javadoc: (javadoc java-object-or-class-here)
+    Exit: Control+D or (exit) or (quit)
+ Results: Stored in vars *1, *2, *3, an exception in *e
+
+emacskeys.core=> 
+emacskeys.core=> 
+emacskeys.core=> 
+emacskeys.core=> cd(import 'edu.princeton.cs.algs4.Huffman)
+(import 'edu.princeton.cs.algs4.Huffman)
+Execution error (ClassNotFoundException) at java.net.URLClassLoader/findClass (URLClassLoader.java:445).
+edu.princeton.cs.algs4.Huffman
+
+emacskeys.core=>   c c^C
+
+
+emacskeys.core=> Bye for now!
+(base) sam@sams-MBP emacskeys % 
+
+Process shell finished
+(base) sam@sams-MBP emacskeys % lein repl
+lein repl
+(base) sam@sams-MBP emacskeys % cd javasrc/
+cd javasrc/
+(base) sam@sams-MBP javasrc % javac Huffman.java
+javac Huffman.java
+Huffman.java:87: error: cannot find symbol
+        BinaryStdOut.write(input.length);
+                           ^
+  symbol:   variable input
+  location: class Huffman
+Huffman.java:87: error: cannot find symbol
+        BinaryStdOut.write(input.length);
+        ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:90: error: cannot find symbol
+        for (int i = 0; i < input.length; i++) {
+                            ^
+  symbol:   variable input
+  location: class Huffman
+Huffman.java:91: error: cannot find symbol
+            String code = st[input[i]];
+                             ^
+  symbol:   variable input
+  location: class Huffman
+Huffman.java:94: error: cannot find symbol
+                    BinaryStdOut.write(false);
+                    ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:97: error: cannot find symbol
+                    BinaryStdOut.write(true);
+                    ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:104: error: cannot find symbol
+        BinaryStdOut.close();
+        ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:111: error: cannot find symbol
+        MinPQ<Node> pq = new MinPQ<Node>();
+        ^
+  symbol:   class MinPQ
+  location: class Huffman
+Huffman.java:111: error: cannot find symbol
+        MinPQ<Node> pq = new MinPQ<Node>();
+                             ^
+  symbol:   class MinPQ
+  location: class Huffman
+Huffman.java:130: error: cannot find symbol
+            BinaryStdOut.write(true);
+            ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:131: error: cannot find symbol
+            BinaryStdOut.write(x.ch, 8);
+            ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:134: error: cannot find symbol
+        BinaryStdOut.write(false);
+        ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:160: error: cannot find symbol
+        int length = BinaryStdIn.readInt();
+                     ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:166: error: cannot find symbol
+                boolean bit = BinaryStdIn.readBoolean();
+                              ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:170: error: cannot find symbol
+            BinaryStdOut.write(x.ch, 8);
+            ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:172: error: cannot find symbol
+        BinaryStdOut.close();
+        ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:177: error: cannot find symbol
+        boolean isLeaf = BinaryStdIn.readBoolean();
+                         ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:179: error: cannot find symbol
+            return new Node(BinaryStdIn.readChar(), -1, null, null);
+                            ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:193: error: method compress in class Huffman cannot be applied to given types;
+        if      (args[0].equals("-")) compress();
+                                      ^
+  required: int[]
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+19 errors
+(base) sam@sams-MBP javasrc % javac Huffman.java
+javac Huffman.java
+Huffman.java:90: error: cannot find symbol
+        BinaryStdOut.write(input.length);
+                           ^
+  symbol:   variable input
+  location: class Huffman
+Huffman.java:90: error: cannot find symbol
+        BinaryStdOut.write(input.length);
+        ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:93: error: cannot find symbol
+        for (int i = 0; i < input.length; i++) {
+                            ^
+  symbol:   variable input
+  location: class Huffman
+Huffman.java:94: error: cannot find symbol
+            String code = st[input[i]];
+                             ^
+  symbol:   variable input
+  location: class Huffman
+Huffman.java:97: error: cannot find symbol
+                    BinaryStdOut.write(false);
+                    ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:100: error: cannot find symbol
+                    BinaryStdOut.write(true);
+                    ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:107: error: cannot find symbol
+        BinaryStdOut.close();
+        ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:114: error: cannot find symbol
+        MinPQ<Node> pq = new MinPQ<Node>();
+        ^
+  symbol:   class MinPQ
+  location: class Huffman
+Huffman.java:114: error: cannot find symbol
+        MinPQ<Node> pq = new MinPQ<Node>();
+                             ^
+  symbol:   class MinPQ
+  location: class Huffman
+Huffman.java:133: error: cannot find symbol
+            BinaryStdOut.write(true);
+            ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:134: error: cannot find symbol
+            BinaryStdOut.write(x.ch, 8);
+            ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:137: error: cannot find symbol
+        BinaryStdOut.write(false);
+        ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:163: error: cannot find symbol
+        int length = BinaryStdIn.readInt();
+                     ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:169: error: cannot find symbol
+                boolean bit = BinaryStdIn.readBoolean();
+                              ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:173: error: cannot find symbol
+            BinaryStdOut.write(x.ch, 8);
+            ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:175: error: cannot find symbol
+        BinaryStdOut.close();
+        ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:180: error: cannot find symbol
+        boolean isLeaf = BinaryStdIn.readBoolean();
+                         ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:182: error: cannot find symbol
+            return new Node(BinaryStdIn.readChar(), -1, null, null);
+                            ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+18 errors
+(base) sam@sams-MBP javasrc % javac Huffman.java
+javac Huffman.java
+Huffman.java:85: error: incompatible types: unexpected return value
+	return st;
+	       ^
+Huffman.java:113: error: cannot find symbol
+        MinPQ<Node> pq = new MinPQ<Node>();
+        ^
+  symbol:   class MinPQ
+  location: class Huffman
+Huffman.java:113: error: cannot find symbol
+        MinPQ<Node> pq = new MinPQ<Node>();
+                             ^
+  symbol:   class MinPQ
+  location: class Huffman
+Huffman.java:132: error: cannot find symbol
+            BinaryStdOut.write(true);
+            ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:133: error: cannot find symbol
+            BinaryStdOut.write(x.ch, 8);
+            ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:136: error: cannot find symbol
+        BinaryStdOut.write(false);
+        ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:162: error: cannot find symbol
+        int length = BinaryStdIn.readInt();
+                     ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:168: error: cannot find symbol
+                boolean bit = BinaryStdIn.readBoolean();
+                              ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:172: error: cannot find symbol
+            BinaryStdOut.write(x.ch, 8);
+            ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:174: error: cannot find symbol
+        BinaryStdOut.close();
+        ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:179: error: cannot find symbol
+        boolean isLeaf = BinaryStdIn.readBoolean();
+                         ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:181: error: cannot find symbol
+            return new Node(BinaryStdIn.readChar(), -1, null, null);
+                            ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+12 errors
+(base) sam@sams-MBP javasrc % javac Huffman.java
+javac Huffman.java
+Huffman.java:113: error: cannot find symbol
+        MinPQ<Node> pq = new MinPQ<Node>();
+        ^
+  symbol:   class MinPQ
+  location: class Huffman
+Huffman.java:113: error: cannot find symbol
+        MinPQ<Node> pq = new MinPQ<Node>();
+                             ^
+  symbol:   class MinPQ
+  location: class Huffman
+Huffman.java:132: error: cannot find symbol
+            BinaryStdOut.write(true);
+            ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:133: error: cannot find symbol
+            BinaryStdOut.write(x.ch, 8);
+            ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:136: error: cannot find symbol
+        BinaryStdOut.write(false);
+        ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:162: error: cannot find symbol
+        int length = BinaryStdIn.readInt();
+                     ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:168: error: cannot find symbol
+                boolean bit = BinaryStdIn.readBoolean();
+                              ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:172: error: cannot find symbol
+            BinaryStdOut.write(x.ch, 8);
+            ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:174: error: cannot find symbol
+        BinaryStdOut.close();
+        ^
+  symbol:   variable BinaryStdOut
+  location: class Huffman
+Huffman.java:179: error: cannot find symbol
+        boolean isLeaf = BinaryStdIn.readBoolean();
+                         ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+Huffman.java:181: error: cannot find symbol
+            return new Node(BinaryStdIn.readChar(), -1, null, null);
+                            ^
+  symbol:   variable BinaryStdIn
+  location: class Huffman
+11 errors
+(base) sam@sams-MBP javasrc % pip install dahuffman
+pip install dahuffman
+Collecting dahuffman
+  Downloading dahuffman-0.4.1-py2.py3-none-any.whl (18 kB)
+Installing collected packages: dahuffman
+Successfully installed dahuffman-0.4.1
+(base) sam@sams-MBP javasrc % python
+python
+Python 3.10.11 (main, Apr 20 2023, 13:58:42) [Clang 14.0.6 ] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+(base) sam@sams-MBP javasrc % python
+python
+Python 3.10.11 (main, Apr 20 2023, 13:58:42) [Clang 14.0.6 ] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+(base) sam@sams-MBP javasrc % python3
+python3
+Python 3.10.11 (main, Apr 20 2023, 13:58:42) [Clang 14.0.6 ] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+(base) sam@sams-MBP javasrc % 
