@@ -7,4 +7,4 @@ WARNING: When using a keylogger, be careful not to log any sensitive information
 
 citing this work:
 
-Straus, S. (2023). Better Keybindings with Information Theory [Computer software]. https://github.com/sstraust/shannonmax
+Straus, S. (2024). Better Keybindings with Information Theory [Computer software]. https://github.com/sstraust/shannonmax
