@@ -1,0 +1,8 @@
+cff-version: 1.0.0
+message: "How to cite:"
+authors:
+- family-names: "Straus"
+  given-names: "Sam"
+title: "Better Keybindings with Information Theory"
+date-released: 2023-03-21
+url: "https://github.com/sstraust/shannonmax"

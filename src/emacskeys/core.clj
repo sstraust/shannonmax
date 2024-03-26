@@ -263,10 +263,27 @@
 
 (take 20
       (map #(select-keys % [:command :actual-keys :difference])
+      (sort-by :difference >
+                  (for [binding keybindings-correctness-data
+                        :when (> (:frequencies binding) 10)]
+                    binding
+                    ))))
+
+
+
+
+
+
+
+(take 20
+      (map #(select-keys % [:command :actual-keys :difference])
       (sort-by :difference <
                   (for [binding keybindings-correctness-data]
                     binding
                     ))))
+
+
+
 
 
 
