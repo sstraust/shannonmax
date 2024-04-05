@@ -34,9 +34,11 @@
 (def keylog-frequencies (frequencies
                          (map :command-name keylog-commands)))
 
+
+
 (take 10 (sort-by second > keylog-frequencies))
 
-
+;; (count keylog-frequencies-cleaned)
 (def keylog-frequencies-cleaned (drop 5 (sort-by second > keylog-frequencies)))
 
 
