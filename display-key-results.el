@@ -1,7 +1,30 @@
 ;;; -*- lexical-binding: t -*-
-(defvar output-buffer (get-buffer-create "shannonmax-results"))
-(defvar alphabet-size 52)
+
+(defgroup shannon-max nil
+  "Customization group for ShannonMax."
+  :package-version '(keyfreq . "1.7")
+  :group 'local
+  :prefix "shannon-max")
+
+(defcustom shannon-max-output-buffer
+  (get-buffer-create "shannon-max-results")
+  "The name of the buffer to display the results"
+  :type 'buffer
+  :group 'shannon-max)
+
+(defcustom shannon-max-alphabet-size
+  52
+  :type 'integer
+  :group 'shannon-max)
+
+(defcustom shannon-max-keylog-file-name
+  (expand-file-name "~/emacs-logged-keys")
+  :type 'string
+  :group shannon-max)
+
+
 (defconst shannonmax-process-name "shannonmax-gather-frequencies")
+
 
 (defun keyseq-to-keylist (keyseq)
   (split-string
@@ -71,7 +94,7 @@
 
 (defun command-info--theoretical-keylength (command-info-input)
   (* -1 (/ (log2 (command-info-probability command-info-input))
-	   (float (log2 alphabet-size)))))
+	   (float (log2 shannon-max-alphabet-size)))))
 (defun sort-by (input-list num-func)
   (sort (copy-list input-list)
 	(lambda (x y) (< (apply num-func (list x))
@@ -134,7 +157,7 @@
 
 ;; (length command-freqs)
 (defun display-shannon-output (command-freqs-input)
-  (with-current-buffer output-buffer
+  (with-current-buffer shannon-max-output-buffer
     (erase-buffer)
     (insert "Total Commands Logged: " (number-to-string (total-freq-count command-freqs-input)) "\n")
     (insert "Entropy: " (number-to-string (command-entropy command-freqs-input)) "\n\n\n")
@@ -153,13 +176,25 @@
 
 
 (defun run-proces-and-display-results ()
+  (interactive)
   (progn
+    (switch-to-buffer-other-window shannon-max-output-buffer)
+    (with-current-buffer shannon-max-output-buffer
+      (erase-buffer)
+      (insert "Loading...."))
+      
     (with-current-buffer shannonmax-process-name
       (erase-buffer))
+    
+     
     (let* ((process-name "shannonmax-process1")
 	 (compute-freqs-process (start-process process-name shannonmax-process-name
 					       "lein" "run" "-m" "emacskeys.build-analysis-file/write-frequency-maps"
-					       "/Users/sam/emacs-logged-keys4")))
+					       shannon-max-keylog-file-name)))
       (set-process-sentinel (get-process process-name)
 			    (lambda (process event)
+			      (with-current-buffer shannon-max-output-buffer
+				(erase-buffer))
 			      (display-shannon-output (commands-from-process-output shannonmax-process-name)))))))
+
+;; (run-proces-and-display-results)

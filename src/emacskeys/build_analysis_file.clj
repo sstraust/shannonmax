@@ -1,4 +1,5 @@
 (ns emacskeys.build-analysis-file
+  (:gen-class)
   (:require [clojure.data.csv :as csv]
             [clojure.java.io :as io]))
 
@@ -45,5 +46,8 @@
 
 
       )))
+
+(defn -main [& args]
+  (write-frequency-maps (first args)))
 
 ;; (write-frequency-maps "/Users/sam/emacs-logged-keys4")
