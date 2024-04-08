@@ -24,6 +24,8 @@ Original Talk: https://www.youtube.com/watch?v=MytPttbIUOY
    
    Add 
         ``` (shannon-max-start-logger) ``` to your .emacs configuration file.
+		
+	After a few minutes, check the contents of ``` ~/emacs-logged-keys ``` to verify the logger is working correctly.
 
 3. Once you have enough data, call ``` M-x shannon-max-analyze ``` to see the results!
 

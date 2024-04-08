@@ -19,7 +19,7 @@
   :group 'shannon-max)
 
 (defcustom shannon-max-keylog-file-name
-  (expand-file-name "~/emacs-logged-keys4")
+  (expand-file-name "~/emacs-logged-keys")
   "The file to store the keylogged keys and commands."
   :type 'string
   :group 'shannon-max)
