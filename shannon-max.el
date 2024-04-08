@@ -31,6 +31,22 @@
   :type 'function
   :group 'shannon-max)
 
+(defcustom shannon-max-filtered-commands
+  '("self-insert-command" "markdown-enter-key" "org-kill-line" "god-mode-describe-key" "org-return" "isearch-delete-char" "undefined" "describe-key" "cider-repl-return" "nil")
+  "A list of the emacs commands to ignore from the output. We also filter all commands matching lambda, or open brackets"
+  :type '(repeat string)
+  :group 'shannon-max)
+
+(defcustom shannon-max-filter-commands-fn
+  (lambda (command-name)
+    (string-match-p "ido-*" command-name))
+  "A function of the emacs commands to ignore from the output."
+  :type 'function
+  :group 'shannon-max)
+
+
+  
+
 
 
 (defconst shannon-max-process-buffer "shannon-max-gather-frequencies")
@@ -118,6 +134,19 @@
 (defun shannon-max-total-freq-count (command-freq-input)
   (apply '+ (mapcar #'shannon-max-command-info-freq command-freq-input)))
 
+
+
+(defun shannon-max-filter-filtered-commands (command-freq-input)
+  (seq-filter
+   (lambda (x)
+     (and (not (member (shannon-max-command-info-command-name x) shannon-max-filtered-commands))
+	  (or (not shannon-max-filter-commands-fn)
+	      (not (funcall shannon-max-filter-commands-fn (shannon-max-command-info-command-name x))))
+	  ))
+   command-freq-input))
+
+  
+
 (defun shannon-max-commands-from-process-output (output-buffer)
   (let ((current-lines '())
 	(command-freqs nil)
@@ -133,6 +162,7 @@
     (setq current-lines (seq-filter (lambda (x)
 				      (string-match "," x)) current-lines))
     (setq command-freqs (mapcar #'shannon-max-extract-to-struct current-lines))
+    (setq command-freqs (shannon-max-filter-filtered-commands command-freqs))
     (setq total-freq-count (shannon-max-total-freq-count command-freqs))
     (mapcar (lambda (x)
 	  (setf (shannon-max-command-info-probability x)
@@ -140,6 +170,7 @@
 		   (float total-freq-count))))
 	    command-freqs)
     command-freqs))
+
     
 (defun shannon-max-log2 (x)
   (/ (log x) (log 2)))
@@ -194,7 +225,7 @@
 		(* (eval page-access-symbol) 10))))))
 
 (defun shannon-max-top-commands-to-shorten (command-freqs-input)
-  (let ((filtered-sorted (seq-filter (lambda (x) (> (shannon-max-command-info-freq x) 5))
+  (let* ((filtered-sorted (seq-filter (lambda (x) (> (shannon-max-command-info-freq x) 5))
 		     (sort-by command-freqs-input (lambda (x)
 				 (- (shannon-max-command-info--theoretical-keylength x)
 				    (shannon-max-command-info--actual-keylength x)))))))
@@ -204,7 +235,7 @@
 
 ;; (cl-subseq '(1 2 3) 0 1)
 (defun shannon-max-top-commands-to-lengthen (command-freqs-input)
-  (let ((filtered-sorted
+  (let* ((filtered-sorted
 	 (seq-filter (lambda (x) (> (shannon-max-command-info-freq x) 5))
 		     (sort-by command-freqs-input (lambda (x)
 						    (* -1 (- (shannon-max-command-info--theoretical-keylength x)
@@ -322,7 +353,7 @@
 	    (define-key map (kbd "C-c C-e") 'keymap-global-set)
 	    map))
 
-(defun shannon-max-run-proces-and-display-results ()
+(defun shannon-max-analyze ()
   (interactive)
   (progn
     (let ((shannon-max-output-buffer (get-buffer-create shannon-max-output-buffer-name)))
