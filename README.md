@@ -106,6 +106,7 @@ To get really optimal output, we'd like to understand how _pairs_ or sequences o
 #### More Things to Work On
 - Easier Installation on MELPA
 - Better Custom UI menus for rebinding keys (rather than keymap-global-set)
+- Better support for capitalized letters
 
 
 Any other thoughts? Feel free to open an issue on this Repo :D
