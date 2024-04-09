@@ -188,7 +188,7 @@
 
 (defun shannon-max-keypress-cost (keypress)
   (if shannon-max-custom-keypress-cost
-      (funcall shannon-max-custom-keypress-cost)
+      (funcall shannon-max-custom-keypress-cost keypress)
     (length (split-string keypress "-"))))
 
 (defun shannon-max-keyseq-cost (keyseq)
