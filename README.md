@@ -1,5 +1,7 @@
 # ShannonMax
 
+This page is _under construction_ I'll update to remove this comment when the package is ready for use.
+
 ShannonMax uses information theory to **analyze your emacs usage** and **suggest better keybindings**.
 
 In particular, it helps you find commands where changing the keybinding can <ins>significantly reduce the amount you type</ins>.
