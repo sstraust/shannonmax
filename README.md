@@ -23,7 +23,7 @@ Original Talk: https://www.youtube.com/watch?v=MytPttbIUOY
    ~/.emacs.d/custom/target/emacskeys-0.1.0-SNAPSHOT-standalone.jar
    ```
    
-   And you should have something in your ```.emacs`` that looks like this:
+   And you should have something in your ```.emacs``` that looks like this:
 	```
     (add-to-list 'load-path "~/.emacs.d/custom")
     (require 'shannon-max)

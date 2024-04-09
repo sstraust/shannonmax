@@ -1,5 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 (require 'cl-lib)
+(require 'subr-x)
 (defgroup shannon-max nil
   "Customization group for ShannonMax."
   :package-version '(keyfreq . "1.7")
