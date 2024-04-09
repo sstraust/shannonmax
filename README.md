@@ -17,9 +17,20 @@ Original Talk: https://www.youtube.com/watch?v=MytPttbIUOY
 ## How to Use
 1. Download the files ``` shannon-max.el ```, and ``` target/emacskeys-0.1.0-SNAPSHOT-standalone.jar ```. Put them in the same directory, somewhere in your emacs path. So the structure should look like:
    ```
-   ~/.emacs.d/shannon-max.el
-   ~/.emacs.d/target/emacskeys-0.1.0-SNAPSHOT-standalone.jar
+   ~/.emacs.d/custom/shannon-max.el
+   ~/.emacs.d/custom/target/emacskeys-0.1.0-SNAPSHOT-standalone.jar
    ```
+   
+   And you should have something in your ```.emacs`` that looks like this:
+	```
+    (add-to-list 'load-path "~/.emacs.d/custom")
+    (require 'shannon-max)
+	(setq shannon-max-jar-file
+      (expand-file-name "~/.emacs.d/custom/target/emacskeys-0.1.0-SNAPSHOT-standalone.jar"))
+
+   ```
+   You'll also need to have java/the jvm available on your machine and chmod +x the jar file to make it executable.
+
 2. Start collecting data.
    
    Add 

@@ -44,6 +44,8 @@
   :type 'function
   :group 'shannon-max)
 
+(defvar shannon-max-jar-file nil)
+
 
   
 
@@ -198,7 +200,7 @@
   (* -1 (/ (shannon-max-log2 (shannon-max-command-info-probability shannon-max-command-info-input))
 	   (float (shannon-max-log2 shannon-max-alphabet-size)))))
 (defun sort-by (input-list num-func)
-  (sort (copy-list input-list)
+  (sort (cl-copy-list input-list)
 	(lambda (x y) (< (apply num-func (list x))
 			 (apply num-func (list y))))))
 
@@ -366,7 +368,7 @@
 	(erase-buffer))
       (let* ((process-name "shannon-max-process1")
 	     (compute-freqs-process (start-process process-name shannon-max-process-buffer
-						   "java" "-jar" "target/emacskeys-0.1.0-SNAPSHOT-standalone.jar" shannon-max-keylog-file-name)))
+						   "java" "-jar" shannon-max-jar-file shannon-max-keylog-file-name)))
 	(set-process-sentinel (get-process process-name)
 			      (lambda (process event)
 				(shannon-max-display-shannon-output (shannon-max-commands-from-process-output shannon-max-process-buffer))))))))
