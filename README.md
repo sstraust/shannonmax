@@ -6,7 +6,7 @@ In particular, it helps you find commands where changing the keybinding can <ins
 
 ![Example Results](https://github.com/sstraust/shannonmax/blob/master/ExampleResults.png)
 
-Warning: When using a keylogger, be careful not to log any sensitive information!
+WARNING: When using a keylogger, be careful not to log any sensitive information!
 
 Cite This:\
 Straus, S. (2024). Better Keybindings with Information Theory [Computer software]. https://github.com/sstraust/shannonmax
