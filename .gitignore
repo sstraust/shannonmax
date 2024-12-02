@@ -9,3 +9,6 @@ pom.xml.asc
 /.prepl-port
 .hgignore
 .hg/
+.clj-kondo/.cache/
+.lsp/.cache/
+src/emacskeys/.clj-kondo/.cache/

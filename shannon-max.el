@@ -48,10 +48,6 @@
 (defvar shannon-max-jar-file nil)
 
 
-  
-
-
-
 (defconst shannon-max-process-buffer "shannon-max-gather-frequencies")
 
 
@@ -59,6 +55,7 @@
 (defvar shannon-max-last-command-info nil)
 (defvar shannon-max-current-results-page-to-shorten 0)
 (defvar shannon-max-current-results-page-to-lengthen 0)
+(defvar shannon-max-logger-enabled t)
 
 (defun shannon-max-set-last-command-info ()
   (when (and (key-description (this-command-keys-vector))
@@ -74,13 +71,14 @@
 
 
 (defun shannon-max-logger-log ()
-  (when shannon-max-last-command-info
-    (push (vconcat (vector
-		    real-last-command)
-		   shannon-max-last-command-info)
-	  shannon-max-logged-events)
-    (setq shannon-max-last-command-info nil))
-  (shannon-max-set-last-command-info))
+  (when shannon-max-logger-enabled
+    (when shannon-max-last-command-info
+      (push (vconcat (vector
+		      real-last-command)
+		     shannon-max-last-command-info)
+	    shannon-max-logged-events)
+      (setq shannon-max-last-command-info nil))
+    (shannon-max-set-last-command-info)))
 
 ;; (shannon-logger-save)
 (defun shannon-max-logger-save ()
@@ -113,6 +111,16 @@
   (shannon-logger-autosave))
 (prefer-coding-system 'utf-8)
 
+(defun shannon-max-logger-enabled-toggle ()
+  (interactive)
+  (if shannon-max-logger-enabled
+      (progn (setq shannon-max-logger-enabled nil)
+	     (remove-hook 'post-command-hook 'shannon-max-logger-log))
+    (progn (setq shannon-max-logger-enabled t)
+	   ;; remove it again, just to be safe, so we don't have a bunch
+	   ;; of duplicate hooks lying around
+	   (remove-hook 'post-command-hook 'shannon-max-logger-log)
+	   (add-hook 'post-command-hook 'shannon-max-logger-log))))
 
 (defun shannon-max-keyseq-to-keylist (keyseq)
   (split-string
@@ -123,7 +131,7 @@
    (lambda (x) (not (string-blank-p x)))
    (butlast (cdr (split-string keyseqs-list-string "\"")))))
 
-(cl-defstruct shannon-max-command-info command-name freq keyseqs probability theoretical-keylength actual-keylength)
+(cl-defstruct shannon-max-command-info command-name freq keyseqs probability)
 (defun shannon-max-extract-to-struct (x)
   (let ((split-contents (split-string x ",")))
     (make-shannon-max-command-info :command-name (car split-contents)
@@ -131,7 +139,6 @@
 		       :keyseqs (mapcar #'shannon-max-keyseq-to-keylist
 					(shannon-max-keyseqs-to-list (caddr split-contents)))
 		       :probability nil
-		       :actual-keylength nil
 		       )))
 
 (defun shannon-max-total-freq-count (command-freq-input)
@@ -157,13 +164,17 @@
     (save-excursion
       (set-buffer (get-buffer output-buffer))
       (goto-char (point-min))
-      (while (< (forward-line) 1)
+      (let ((cond-met 0))
+      (while (< cond-met 1)
 	(setq current-lines (cons (buffer-substring-no-properties
 				   (line-beginning-position)
 				   (line-end-position))
-				  current-lines))))
+				  current-lines))
+	(setq cond-met (forward-line))
+	)))
     (setq current-lines (seq-filter (lambda (x)
-				      (string-match "," x)) current-lines))
+				      (string-match "," x))
+				    current-lines))
     (setq command-freqs (mapcar #'shannon-max-extract-to-struct current-lines))
     (setq command-freqs (shannon-max-filter-filtered-commands command-freqs))
     (setq total-freq-count (shannon-max-total-freq-count command-freqs))
