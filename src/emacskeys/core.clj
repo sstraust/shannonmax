@@ -2,6 +2,11 @@
   (:require [clojure.data.csv :as csv]
             [libpython-clj2.python :as py :refer [py. ->python]]
             [clojure.java.io :as io]))
+
+;; THIS FILE IS USED TO DO THE ANALYSIS IN THE LINKED
+;; YOUTUBE VIDEO. IT IS NOT A CORE PART OF THE LIBRARY
+
+
 (if (.exists (io/file "/Users/sam/anaconda3/bin/python3"))
   (py/initialize! :python-executable "/Users/sam/anaconda3/bin/python3"
                   :library-path "/Users/sam/anaconda3/lib/python3.10")

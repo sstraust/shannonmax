@@ -12,9 +12,10 @@
    :cursor-position (nth csv-row 5 nil)})
 
 
-(defn is-invalid-command [command-name]
-  (or (re-find #"(lambda)|(\()|(\[)" command-name)
-      (empty? command-name)))
+(defn invalid-command? [command-name]
+  (boolean
+   (or (re-find #"(lambda)|(\()|(\[)" command-name)
+       (empty? command-name))))
 
 (defn get-command-keyseqs [commands-list]
   (let [commands-grouped  (group-by :command-name commands-list)]
@@ -33,7 +34,7 @@
   (let [keylog-file (slurp filename)
         keylog-csv (doall (csv/read-csv keylog-file))
         keylog-commands (map row-to-map keylog-csv)
-        keylog-commands (remove #(is-invalid-command (:command-name %)) keylog-commands)
+        keylog-commands (remove #(invalid-command? (:command-name %)) keylog-commands)
         keylog-frequencies (frequencies
                             (map :command-name keylog-commands))
         actual-commands-map (get-command-keyseqs keylog-commands)]
