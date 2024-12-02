@@ -6,7 +6,6 @@ In particular, it helps you find commands where changing the keybinding can <ins
 
 ![Example Results](https://github.com/sstraust/shannonmax/blob/master/ExampleResults.png)
 
-
 WARNING: When using a keylogger, be careful not to log any sensitive information!
 
 Cite This:\
@@ -15,6 +14,9 @@ Straus, S. (2024). Better Keybindings with Information Theory [Computer software
 Original Talk: https://www.youtube.com/watch?v=MytPttbIUOY
 
 ## How to Use
+
+
+
 1. Download the files ``` shannon-max.el ```, and ``` target/emacskeys-0.1.0-SNAPSHOT-standalone.jar ```. Put them in the same directory, somewhere in your emacs path. So the structure should look like:
    ```
    ~/.emacs.d/custom/shannon-max.el
