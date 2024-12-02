@@ -11,3 +11,4 @@ pom.xml.asc
 .hg/
 .clj-kondo/.cache/
 .lsp/.cache/
+src/emacskeys/.clj-kondo/.cache/
