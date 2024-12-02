@@ -9,4 +9,5 @@ pom.xml.asc
 /.prepl-port
 .hgignore
 .hg/
-.clj-kondo/.cache
+.clj-kondo/.cache/
+.lsp/.cache/
