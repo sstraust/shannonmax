@@ -12,3 +12,5 @@ pom.xml.asc
 .clj-kondo/.cache/
 .lsp/.cache/
 src/emacskeys/.clj-kondo/.cache/
+target/stale
+.DS_Store

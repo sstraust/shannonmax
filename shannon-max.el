@@ -45,15 +45,16 @@
   :type 'function
   :group 'shannon-max)
 
+
 (defcustom shannon-max-jar-download-location
-  (locate-user-emacs-file "shannon-max/emacskeys-0.1.0-SNAPSHOT-standalone.jar")
+  (locate-user-emacs-file "shannon-max/emacskeys-0.1.1-SNAPSHOT-standalone.jar")
   "The location where shannon-max stores the downloaded jar file, if manually downloaded"
   :type 'file
   :group 'shannon-max)
 
 (defvar shannon-max-jar-file nil)
 
-(defvar shannon-max--jar-download-path "https://github.com/sstraust/shannonmax/raw/refs/heads/master/target/emacskeys-0.1.0-SNAPSHOT-standalone.jar")
+(defvar shannon-max--jar-download-path "https://github.com/sstraust/shannonmax/raw/refs/heads/master/target/emacskeys-0.1.1-SNAPSHOT-standalone.jar")
 
 
 (defconst shannon-max-process-buffer "shannon-max-gather-frequencies")
@@ -380,8 +381,10 @@
   (when (and (null shannon-max-jar-file)
 	     (not (null shannon-max--jar-download-path))
 	     (not (null shannon-max-jar-download-location)))
-    (if (y-or-n-p (concat "Download shanon-max-jar to " shannon-max-download-location "? (necessary to parse your keyfreqs file):"))
-	(progn (url-copy-file shannon-max--jar-download-path
+    (if (y-or-n-p (concat "Download shanon-max-jar to " shannon-max-jar-download-location "? (necessary to parse your keyfreqs file):"))
+	(progn
+	  (make-directory (file-name-directory shannon-max-jar-download-location) t)
+	  (url-copy-file shannon-max--jar-download-path
 			      shannon-max-jar-download-location)
 	       (setq shannon-max-jar-file shannon-max-jar-download-location))
       (message "Shannon Max needs the jar file to run. It is used to read your keypress csv file into keyfreqs for processing."))))
