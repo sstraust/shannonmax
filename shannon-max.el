@@ -47,7 +47,7 @@
 
 
 (defcustom shannon-max-jar-download-location
-  (locate-user-emacs-file "shannon-max/emacskeys-0.1.1-SNAPSHOT-standalone.jar")
+  (expand-file-name (locate-user-emacs-file "shannon-max/emacskeys-0.1.1-SNAPSHOT-standalone.jar"))
   "The location where shannon-max stores the downloaded jar file, if manually downloaded"
   :type 'file
   :group 'shannon-max)
@@ -393,6 +393,7 @@
 	    (make-directory (file-name-directory shannon-max-jar-download-location) t)
 	    (url-copy-file shannon-max--jar-download-path
 			   shannon-max-jar-download-location)
+	    (set-file-modes shannon-max-jar-download-location #o500)
 	    (setq shannon-max-jar-file shannon-max-jar-download-location))
 	(message "Shannon Max needs the jar file to run. It is used to read your keypress csv file into keyfreqs for processing.")))))
       
