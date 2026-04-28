@@ -1,15 +1,34 @@
-;;; -*- lexical-binding: t -*-
+;;; shannon-max.el --- Analyze your keybindings with information theory -*- lexical-binding: t -*-
+
+;; Copyright (C) 2024 Sam Strus
+
+;; Author: Sam Straus <sam_straus@alumni.brown.edu>
+;; URL: https://github.com/sstraust/shannonmax
+;; Version: 0.1.1
+;; Package-Requires: ((emacs "29.1"))
+
+;;; Commentary:
+
+;; Uses information theory to analyze your Emacs usage and suggest better keybindings.
+
+;; Add (shannon-max-start-logger) to your .emacs configuration file to start collecting logs.
+;; and then, once you have enough data, call M-x shannon-max-analyze to see the results.
+
+;; see the project readme for more detailed instructions.
+
+;;; Code:
+
 (require 'cl-lib)
 (require 'subr-x)
 (defgroup shannon-max nil
   "Customization group for ShannonMax."
-  :package-version '(keyfreq . "1.7")
+  :package-version '(shannon-max . "0.1.0")
   :group 'local
   :prefix "shannon-max")
 
 (defcustom shannon-max-output-buffer-name
   "shannon-max-results"
-  "The name of the buffer to display the results"
+  "The name of the buffer to display the results."
   :type 'buffer
   :group 'shannon-max)
 
@@ -34,21 +53,21 @@
 
 (defcustom shannon-max-filtered-commands
   '("self-insert-command" "markdown-enter-key" "org-kill-line" "god-mode-describe-key" "org-return" "isearch-delete-char" "undefined" "describe-key" "cider-repl-return" "nil")
-  "A list of the emacs commands to ignore from the output. We also filter all commands matching lambda, or open brackets"
+  "A list of the Emacs commands to ignore from the output.  We also filter all commands matching lambda, or open brackets."
   :type '(repeat string)
   :group 'shannon-max)
 
 (defcustom shannon-max-filter-commands-fn
   (lambda (command-name)
-    (string-match-p "ido-*" command-name))
-  "A function of the emacs commands to ignore from the output."
+    (string-match-p "ido-.*" command-name))
+  "A function of the Emacs commands to ignore from the output."
   :type 'function
   :group 'shannon-max)
 
 
 (defcustom shannon-max-jar-download-location
   (expand-file-name (locate-user-emacs-file "shannon-max/emacskeys-0.1.1-SNAPSHOT-standalone.jar"))
-  "The location where shannon-max stores the downloaded jar file, if manually downloaded"
+  "The location where shannon-max stores the downloaded jar file, if manually downloaded."
   :type 'file
   :group 'shannon-max)
 
@@ -89,7 +108,6 @@
       (setq shannon-max-last-command-info nil))
     (shannon-max-set-last-command-info)))
 
-;; (shannon-logger-save)
 (defun shannon-max-logger-save ()
   (when shannon-max-logged-events
     (with-temp-buffer
@@ -110,26 +128,26 @@
 	  (setq save-silently silent))
 	(setq shannon-max-logged-events '()))))
 
-(defun shannon-logger-autosave ()
+(defun shannon-max-logger-autosave ()
   (setq shannon-logger-timer
-	(run-with-idle-timer 2 t 'shannon-max-logger-save)))
+	(run-with-idle-timer 2 t #'shannon-max-logger-save)))
 
 ;; (shannon-max-logger-save)
 (defun shannon-max-start-logger ()
-  (add-hook 'post-command-hook 'shannon-max-logger-log)
-  (shannon-logger-autosave))
+  (add-hook 'post-command-hook #'shannon-max-logger-log)
+  (shannon-max-logger-autosave))
 (prefer-coding-system 'utf-8)
 
 (defun shannon-max-logger-enabled-toggle ()
   (interactive)
   (if shannon-max-logger-enabled
       (progn (setq shannon-max-logger-enabled nil)
-	     (remove-hook 'post-command-hook 'shannon-max-logger-log))
+	     (remove-hook 'post-command-hook #'shannon-max-logger-log))
     (progn (setq shannon-max-logger-enabled t)
 	   ;; remove it again, just to be safe, so we don't have a bunch
 	   ;; of duplicate hooks lying around
-	   (remove-hook 'post-command-hook 'shannon-max-logger-log)
-	   (add-hook 'post-command-hook 'shannon-max-logger-log))))
+	   (remove-hook 'post-command-hook #'shannon-max-logger-log)
+	   (add-hook 'post-command-hook #'shannon-max-logger-log))))
 
 (defun shannon-max-keyseq-to-keylist (keyseq)
   (split-string
@@ -147,8 +165,7 @@
 		       :freq (string-to-number (cadr split-contents))
 		       :keyseqs (mapcar #'shannon-max-keyseq-to-keylist
 					(shannon-max-keyseqs-to-list (caddr split-contents)))
-		       :probability nil
-		       )))
+		       :probability nil)))
 
 (defun shannon-max-total-freq-count (command-freq-input)
   (apply '+ (mapcar #'shannon-max-command-info-freq command-freq-input)))
@@ -160,8 +177,7 @@
    (lambda (x)
      (and (not (member (shannon-max-command-info-command-name x) shannon-max-filtered-commands))
 	  (or (not shannon-max-filter-commands-fn)
-	      (not (funcall shannon-max-filter-commands-fn (shannon-max-command-info-command-name x))))
-	  ))
+	      (not (funcall shannon-max-filter-commands-fn (shannon-max-command-info-command-name x))))))
    command-freq-input))
 
   
@@ -179,8 +195,7 @@
 				   (line-beginning-position)
 				   (line-end-position))
 				  current-lines))
-	(setq cond-met (forward-line))
-	)))
+	(setq cond-met (forward-line)))))
     (setq current-lines (seq-filter (lambda (x)
 				      (string-match "," x))
 				    current-lines))
@@ -212,24 +227,24 @@
     (length (split-string keypress "-"))))
 
 (defun shannon-max-keyseq-cost (keyseq)
-  (apply '+ (mapcar 'shannon-max-keypress-cost keyseq)))
+  (apply '+ (mapcar #'shannon-max-keypress-cost keyseq)))
 
 (defun shannon-max-command-info--actual-keylength (shannon-max-command-info-input)
-  (apply 'min (mapcar 'shannon-max-keyseq-cost (shannon-max-command-info-keyseqs shannon-max-command-info-input))))
+  (apply 'min (mapcar #'shannon-max-keyseq-cost (shannon-max-command-info-keyseqs shannon-max-command-info-input))))
 
 (defun shannon-max-command-info--theoretical-keylength (shannon-max-command-info-input)
   (* -1 (/ (shannon-max-log2 (shannon-max-command-info-probability shannon-max-command-info-input))
 	   (float (shannon-max-log2 shannon-max-alphabet-size)))))
-(defun sort-by (input-list num-func)
+(defun shannon-max-sort-by (input-list num-func)
   (sort (cl-copy-list input-list)
 	(lambda (x y) (< (apply num-func (list x))
 			 (apply num-func (list y))))))
 
 (defun shannon-max-command-info--shortest-keybinding (shannon-max-command-info-input)
   (car
-   (sort-by
+   (shannon-max-sort-by
     (shannon-max-command-info-keyseqs shannon-max-command-info-input)
-    'shannon-max-keyseq-cost)))
+    #'shannon-max-keyseq-cost)))
 
 
   
@@ -249,7 +264,7 @@
 
 (defun shannon-max-top-commands-to-shorten (command-freqs-input)
   (let* ((filtered-sorted (seq-filter (lambda (x) (> (shannon-max-command-info-freq x) 5))
-		     (sort-by command-freqs-input (lambda (x)
+		     (shannon-max-sort-by command-freqs-input (lambda (x)
 				 (- (shannon-max-command-info--theoretical-keylength x)
 				    (shannon-max-command-info--actual-keylength x)))))))
     (shannon-max-get-results-for-page
@@ -260,7 +275,7 @@
 (defun shannon-max-top-commands-to-lengthen (command-freqs-input)
   (let* ((filtered-sorted
 	 (seq-filter (lambda (x) (> (shannon-max-command-info-freq x) 5))
-		     (sort-by command-freqs-input (lambda (x)
+		     (shannon-max-sort-by command-freqs-input (lambda (x)
 						    (* -1 (- (shannon-max-command-info--theoretical-keylength x)
 							     (shannon-max-command-info--actual-keylength x))))))))
     (shannon-max-get-results-for-page
@@ -336,7 +351,7 @@
 			0))
   (shannon-max-refresh-output))
 
-(defun get-current-table-selection ()
+(defun shannon-max-get-current-table-selection ()
   (if (with-current-buffer (get-buffer shannon-max-output-buffer-name)
 	(search-backward "Keybindings that are too short:" nil 't))
       'shannon-max-current-results-page-to-lengthen
@@ -362,18 +377,18 @@
 (defun shannon-max-page-down ()
   (interactive)
   (shannon-max-edit-saving-line-num
-   (lambda () (shannon-max-page-down-helper (get-current-table-selection)))))
+   (lambda () (shannon-max-page-down-helper (shannon-max-get-current-table-selection)))))
 (defun shannon-max-page-up ()
   (interactive)
   (shannon-max-edit-saving-line-num
-   (lambda () (shannon-max-page-up-helper (get-current-table-selection)))))
+   (lambda () (shannon-max-page-up-helper (shannon-max-get-current-table-selection)))))
 
 (define-minor-mode shannon-max-mode
   "Mode for viewing ShannonMax results"
   :keymap (let ((map (make-sparse-keymap)))
-	    (define-key map (kbd "C-c C-n") 'shannon-max-page-down)
-	    (define-key map (kbd "C-c C-p") 'shannon-max-page-up)
-	    (define-key map (kbd "C-c C-e") 'keymap-global-set)
+	    (define-key map (kbd "C-c C-n") #'shannon-max-page-down)
+	    (define-key map (kbd "C-c C-p") #'shannon-max-page-up)
+	    (define-key map (kbd "C-c C-e") #'keymap-global-set)
 	    map))
 
 (defun shannon-max--jar-file-already-downloaded-p ()
@@ -425,3 +440,5 @@
 
 ;; (shannon-max-run-proces-and-display-results)
 (provide 'shannon-max)
+
+;;; shannon-max.el ends here
