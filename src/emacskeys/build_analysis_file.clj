@@ -29,9 +29,14 @@
                (re-find #"\(|mouse|<" %)) keyseq-list))
 
 
+(defn read-last-lines [filename num-lines]
+  (with-open [reader (clojure.java.io/reader filename)]
+    (->> (line-seq reader)
+         (take-last num-lines)
+         (clojure.string/join "\n")))) 
 
 (defn write-frequency-maps [filename]
-  (let [keylog-file (slurp filename)
+  (let [keylog-file (read-last-lines filename 1000000)
         keylog-csv (doall (csv/read-csv keylog-file))
         keylog-commands (map row-to-map keylog-csv)
         keylog-commands (remove #(invalid-command? (:command-name %)) keylog-commands)

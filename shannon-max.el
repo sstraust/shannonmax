@@ -45,7 +45,16 @@
   :type 'function
   :group 'shannon-max)
 
+
+(defcustom shannon-max-jar-download-location
+  (expand-file-name (locate-user-emacs-file "shannon-max/emacskeys-0.1.1-SNAPSHOT-standalone.jar"))
+  "The location where shannon-max stores the downloaded jar file, if manually downloaded"
+  :type 'file
+  :group 'shannon-max)
+
 (defvar shannon-max-jar-file nil)
+
+(defvar shannon-max--jar-download-path "https://github.com/sstraust/shannonmax/raw/refs/heads/master/target/emacskeys-0.1.1-SNAPSHOT-standalone.jar")
 
 
 (defconst shannon-max-process-buffer "shannon-max-gather-frequencies")
@@ -367,6 +376,31 @@
 	    (define-key map (kbd "C-c C-e") 'keymap-global-set)
 	    map))
 
+(defun shannon-max--jar-file-already-downloaded-p ()
+  (and (file-exists-p shannon-max-jar-download-location)
+			  (> (file-attribute-size
+			      (file-attributes shannon-max-jar-download-location))
+			     0)))
+
+(defun shannon-max-download-jar-if-not-present ()
+  (when (and (null shannon-max-jar-file)
+	     (not (null shannon-max--jar-download-path))
+	     (not (null shannon-max-jar-download-location)))
+    (if (shannon-max--jar-file-already-downloaded-p)
+	(setq shannon-max-jar-file shannon-max-jar-download-location)
+      (if (y-or-n-p (concat "Download shanon-max-jar to " shannon-max-jar-download-location "? (necessary to parse your keyfreqs file):"))
+	  (progn
+	    (make-directory (file-name-directory shannon-max-jar-download-location) t)
+	    (url-copy-file shannon-max--jar-download-path
+			   shannon-max-jar-download-location)
+	    (set-file-modes shannon-max-jar-download-location #o500)
+	    (setq shannon-max-jar-file shannon-max-jar-download-location))
+	(message "Shannon Max needs the jar file to run. It is used to read your keypress csv file into keyfreqs for processing.")))))
+      
+	
+	
+	     
+
 (defun shannon-max-analyze ()
   (interactive)
   (progn
@@ -378,6 +412,7 @@
 	(insert "Loading...."))
       (with-current-buffer (get-buffer-create shannon-max-process-buffer)
 	(erase-buffer))
+      (shannon-max-download-jar-if-not-present)
       (let* ((process-name "shannon-max-process1")
 	     (compute-freqs-process (start-process process-name shannon-max-process-buffer
 						   "java" "-jar" shannon-max-jar-file shannon-max-keylog-file-name)))
