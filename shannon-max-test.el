@@ -2,6 +2,9 @@
 
 ;; tests for shannon-max.el
 
+;; !! these tests are intended to be run with emacs --batch
+;;    running tests in your normal emacs will start the logger !!
+
 (ert-deftest shannon-max-log2-test ()
   (should (= (shannon-max-log2 8) 3)))
 
@@ -16,7 +19,8 @@
 	 (test-process-buffer (current-buffer))
 	 (test-process (start-process
 			test-process-name test-process-buffer
-			"java" "-jar" shannon-max-jar-file
+			"java" "-jar" (or shannon-max-jar-file
+					  "./target/emacskeys-0.1.1-SNAPSHOT-standalone.jar")
 			"test/emacskeys/resources/example_keyfreqs_file1")))
     (while (process-live-p test-process)
       (accept-process-output test-process))
@@ -40,7 +44,7 @@ Process shannon-max-proc-test finished
 	 (temp-buff (make-temp-name "scratch"))
 	 (temp-file-name (make-temp-name "./test/emacskeys/resources/scratch"))
 	 (shannon-max-keylog-file-name temp-file-name))
-     (flet ((current-time () 1))
+     (cl-letf (((symbol-function 'current-time) (lambda () 1)))
        (switch-to-buffer (get-buffer-create temp-buff))
        (unwind-protect
 	   (progn
@@ -56,6 +60,7 @@ Process shannon-max-proc-test finished
 		(delete-file temp-file-name))))))
 
 (ert-deftest shannon-max-log-test ()
+  (shannon-max-start-logger)
   (should
    ;; we only write to the log after the _NEXT_
    ;; event occurs, so the last command doesn't appear
@@ -94,6 +99,7 @@ Process shannon-max-proc-test finished
 ;; then you want to call shannon-max-commands-from-process-output
 ;; and verify that it returns the right thing
 (ert-deftest shannon-max-logger-save-test ()
+  (shannon-max-start-logger)
   (wrap-log-test
    (insert "\n\n\n\n\n")
    (goto-char 1)
@@ -149,7 +155,8 @@ forward-char, 1, fundamental-mode, C-a C-a, nil, (3 0)
 	     (test-process-buffer (current-buffer))
 	     (test-process (start-process
 			    test-process-name test-process-buffer
-			    "java" "-jar" shannon-max-jar-file
+			    "java" "-jar" (or shannon-max-jar-file
+					      "./target/emacskeys-0.1.1-SNAPSHOT-standalone.jar")
 			    log-file)))
 	(while (process-live-p test-process)
 	  (accept-process-output test-process))
