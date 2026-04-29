@@ -1,0 +1,23 @@
+name: Build ShannonMax Jar File
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeLaGuardo/setup-clojure@13.2
+        with:
+          lein: 2.9.1
+
+      - run: lein uberjar
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: target/*-standalone.jar
+          fail_on_unmatched_files: true
+          generate_release_notes: true
