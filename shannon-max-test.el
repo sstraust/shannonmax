@@ -41,7 +41,6 @@ Process shannon-max-proc-test finished
 	 (temp-file-name (make-temp-name "./test/emacskeys/resources/scratch"))
 	 (shannon-max-keylog-file-name temp-file-name))
      (cl-letf (((symbol-function 'current-time) (lambda () 1)))
-     ;; (flet ((current-time () 1))
        (switch-to-buffer (get-buffer-create temp-buff))
        (unwind-protect
 	   (progn
