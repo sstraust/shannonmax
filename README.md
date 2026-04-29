@@ -125,5 +125,3 @@ To get really optimal output, we'd like to understand how _pairs_ or sequences o
 
 
 Any other thoughts? Feel free to open an issue on this Repo :D
-
-

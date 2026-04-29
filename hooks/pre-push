@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+
+emacs --batch -l shannon-max.el -l shannon-max-test.el -f ert-run-tests-batch-and-exit
