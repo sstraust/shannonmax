@@ -73,7 +73,7 @@
 
 (defvar shannon-max-jar-file nil)
 
-(defvar shannon-max--jar-download-path "https://github.com/sstraust/shannonmax/raw/refs/heads/master/target/emacskeys-0.1.1-SNAPSHOT-standalone.jar")
+(defvar shannon-max--jar-download-path "https://github.com/sstraust/shannonmax/releases/download/v0.1.1b/emacskeys-0.1.1-SNAPSHOT-standalone.jar")
 
 
 (defconst shannon-max-process-buffer "shannon-max-gather-frequencies")
