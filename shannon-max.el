@@ -20,6 +20,9 @@
 
 (require 'cl-lib)
 (require 'subr-x)
+
+(declare-function org-table-toggle-column-width "org-table" (&optional arg))
+
 (defgroup shannon-max nil
   "Customization group for ShannonMax."
   :package-version '(shannon-max . "0.1.0")
@@ -53,7 +56,8 @@
 
 (defcustom shannon-max-filtered-commands
   '("self-insert-command" "markdown-enter-key" "org-kill-line" "god-mode-describe-key" "org-return" "isearch-delete-char" "undefined" "describe-key" "cider-repl-return" "nil")
-  "A list of the Emacs commands to ignore from the output.  We also filter all commands matching lambda, or open brackets."
+  "A list of the Emacs commands to ignore from the output.
+We also filter all commands matching lambda, or open brackets."
   :type '(repeat string)
   :group 'shannon-max)
 
@@ -67,7 +71,7 @@
 
 (defcustom shannon-max-jar-download-location
   (expand-file-name (locate-user-emacs-file "shannon-max/emacskeys-0.1.1-SNAPSHOT-standalone.jar"))
-  "The location where shannon-max stores the downloaded jar file, if manually downloaded."
+  "Location to store the jar file, if downloaded through shannonmax."
   :type 'file
   :group 'shannon-max)
 
@@ -129,8 +133,7 @@
 	(setq shannon-max-logged-events '()))))
 
 (defun shannon-max-logger-autosave ()
-  (setq shannon-logger-timer
-	(run-with-idle-timer 2 t #'shannon-max-logger-save)))
+  (run-with-idle-timer 2 t #'shannon-max-logger-save))
 
 ;; (shannon-max-logger-save)
 (defun shannon-max-start-logger ()
@@ -186,23 +189,23 @@
   (let ((current-lines '())
 	(command-freqs nil)
 	(total-freq-count nil))
-    (save-excursion
-      (set-buffer (get-buffer output-buffer))
-      (goto-char (point-min))
-      (let ((cond-met 0))
-      (while (< cond-met 1)
-	(setq current-lines (cons (buffer-substring-no-properties
-				   (line-beginning-position)
-				   (line-end-position))
-				  current-lines))
-	(setq cond-met (forward-line)))))
+    (with-current-buffer (get-buffer output-buffer)
+      (save-excursion
+	(goto-char (point-min))
+	(let ((cond-met 0))
+	  (while (< cond-met 1)
+	    (setq current-lines (cons (buffer-substring-no-properties
+				       (line-beginning-position)
+				       (line-end-position))
+				      current-lines))
+	    (setq cond-met (forward-line))))))
     (setq current-lines (seq-filter (lambda (x)
 				      (string-match "," x))
 				    current-lines))
     (setq command-freqs (mapcar #'shannon-max-extract-to-struct current-lines))
     (setq command-freqs (shannon-max-filter-filtered-commands command-freqs))
     (setq total-freq-count (shannon-max-total-freq-count command-freqs))
-    (mapcar (lambda (x)
+    (mapc (lambda (x)
 	  (setf (shannon-max-command-info-probability x)
 		(/ (shannon-max-command-info-freq x)
 		   (float total-freq-count))))
@@ -305,7 +308,7 @@
 
 (defun shannon-max-instantiate-table ()
   (save-excursion
-    (previous-line)
+    (forward-line -1)
     (move-beginning-of-line nil)
     (org-cycle)
     (org-table-toggle-column-width)
@@ -317,7 +320,7 @@
     (org-table-toggle-column-width)
     (org-cycle)
     (org-table-toggle-column-width)
-    (next-line)))
+    (forward-line)))
 
 ;; (length command-freqs)
 (defun shannon-max-display-shannon-output (command-freqs-input)
@@ -328,13 +331,13 @@
   (insert "Keybindings that are too long: \n")
   (insert (shannon-max-table-header))
   
-  (mapcar (lambda (x) (insert (shannon-max-command-table-str x)))
+  (mapc (lambda (x) (insert (shannon-max-command-table-str x)))
 	  (shannon-max-top-commands-to-shorten command-freqs-input))
   (shannon-max-instantiate-table)
   (insert "\n\n\n\n")
   (insert "Keybindings that are too short: \n")
   (insert (shannon-max-table-header))
-  (mapcar (lambda (x) (insert (shannon-max-command-table-str x)))
+  (mapc (lambda (x) (insert (shannon-max-command-table-str x)))
 	  (shannon-max-top-commands-to-lengthen command-freqs-input))
   (shannon-max-instantiate-table)))
 
@@ -428,11 +431,11 @@
       (with-current-buffer (get-buffer-create shannon-max-process-buffer)
 	(erase-buffer))
       (shannon-max-download-jar-if-not-present)
-      (let* ((process-name "shannon-max-process1")
-	     (compute-freqs-process (start-process process-name shannon-max-process-buffer
-						   "java" "-jar" shannon-max-jar-file shannon-max-keylog-file-name)))
+      (let* ((process-name "shannon-max-process1"))
+	(start-process process-name shannon-max-process-buffer
+						   "java" "-jar" shannon-max-jar-file shannon-max-keylog-file-name)
 	(set-process-sentinel (get-process process-name)
-			      (lambda (process event)
+			      (lambda (_process _event)
 				(shannon-max-display-shannon-output (shannon-max-commands-from-process-output shannon-max-process-buffer))))))))
 
 
