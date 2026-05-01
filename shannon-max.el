@@ -20,7 +20,6 @@
 
 (require 'cl-lib)
 (require 'subr-x)
-(prefer-coding-system 'utf-8)
 
 (declare-function org-table-toggle-column-width "org-table" (&optional arg))
 
