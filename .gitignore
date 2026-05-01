@@ -14,3 +14,4 @@ pom.xml.asc
 src/emacskeys/.clj-kondo/.cache/
 target/stale
 .DS_Store
+*.elc
