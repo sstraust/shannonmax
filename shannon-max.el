@@ -206,7 +206,7 @@ https://github.com/sstraust/shannonmax)"
   "Total number of keypresses in the COMMAND-FREQ-INPUT.
 
 COMMAND-FREQ-INPUT is the analsysis data as a list of
- 'shannon-max-command-info' structs."
+ `shannon-max-command-info' structs."
   (apply '+ (mapcar #'shannon-max-command-info-freq command-freq-input)))
 
 
