@@ -333,7 +333,7 @@ for more detailed info."
 
 
 (defun shannon-max--get-results-for-page (commands-list page-access-symbol)
-  "Get the results to display about COMMANDS-LIST for a specific PAGE-ACCESS-SYMBOL."
+  "Display string about COMMANDS-LIST for a specific PAGE-ACCESS-SYMBOL."
   (progn
     (set page-access-symbol (max 0
 				 (min
