@@ -6,7 +6,7 @@
 ;;    running tests in your normal emacs will start the logger !!
 
 (ert-deftest shannon-max-log2-test ()
-  (should (= (shannon-max-log2 8) 3)))
+  (should (= (shannon-max--log2 8) 3)))
 
 
 
@@ -160,7 +160,7 @@ forward-char, 1, fundamental-mode, C-a C-a, nil, (3 0)
 			    log-file)))
 	(while (process-live-p test-process)
 	  (accept-process-output test-process))
-	(shannon-max-commands-from-process-output
+	(shannon-max--commands-from-process-output
 	 (current-buffer)
 	 ))))
 
