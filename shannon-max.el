@@ -20,6 +20,7 @@
 
 (require 'cl-lib)
 (require 'subr-x)
+(prefer-coding-system 'utf-8)
 
 (declare-function org-table-toggle-column-width "org-table" (&optional arg))
 
@@ -89,7 +90,11 @@ We also filter all commands matching lambda, or open brackets."
 (defvar shannon-max-current-results-page-to-lengthen 0)
 (defvar shannon-max-logger-enabled t)
 
-(defun shannon-max-set-last-command-info ()
+(defun shannon-max--set-last-command-info ()
+  "Store info about the last-run command in a variable.
+
+Useful so that we can associate `real-last-command'
+with the stored information."
   (when (and (key-description (this-command-keys-vector))
 	     (not (= (length (key-description (this-command-keys-vector))) 0)))
     (setq shannon-max-last-command-info
@@ -103,6 +108,10 @@ We also filter all commands matching lambda, or open brackets."
 
 
 (defun shannon-max-logger-log ()
+  "Log a command-entered event to shannon-max.
+
+Store in a variable so that saving
+can be done in batch."
   (when shannon-max-logger-enabled
     (when shannon-max-last-command-info
       (push (vconcat (vector
@@ -110,9 +119,10 @@ We also filter all commands matching lambda, or open brackets."
 		     shannon-max-last-command-info)
 	    shannon-max-logged-events)
       (setq shannon-max-last-command-info nil))
-    (shannon-max-set-last-command-info)))
+    (shannon-max--set-last-command-info)))
 
 (defun shannon-max-logger-save ()
+  "Save the in-memory shannon-max log to a file."
   (when shannon-max-logged-events
     (with-temp-buffer
       (dolist (k shannon-max-logged-events)
@@ -133,15 +143,28 @@ We also filter all commands matching lambda, or open brackets."
 	(setq shannon-max-logged-events '()))))
 
 (defun shannon-max-logger-autosave ()
+  "Start a timer to save the log every 2 secs."
   (run-with-idle-timer 2 t #'shannon-max-logger-save))
 
 ;; (shannon-max-logger-save)
 (defun shannon-max-start-logger ()
+  "Begin shannonmax logging.
+
+Adds the `shannon-max-logger-log' `post-command-hook',
+and begins autosave."
   (add-hook 'post-command-hook #'shannon-max-logger-log)
   (shannon-max-logger-autosave))
-(prefer-coding-system 'utf-8)
+
 
 (defun shannon-max-logger-enabled-toggle ()
+  "Toggle whether the shannon-max logger is enabled.
+
+This is intended as a temporary workaround,
+requested by one of our users.
+If you have extremely sensitive info
+that you do not want to be logged,
+it may be worth temporarily removing the shannon-max
+package entirely."
   (interactive)
   (if shannon-max-logger-enabled
       (progn (setq shannon-max-logger-enabled nil)
@@ -152,30 +175,47 @@ We also filter all commands matching lambda, or open brackets."
 	   (remove-hook 'post-command-hook #'shannon-max-logger-log)
 	   (add-hook 'post-command-hook #'shannon-max-logger-log))))
 
-(defun shannon-max-keyseq-to-keylist (keyseq)
+(defun shannon-max--keyseq-to-keylist (keyseq)
+  "Convert KEYSEQ string to a list."
   (split-string
    (string-trim keyseq) " "))
 
-(defun shannon-max-keyseqs-to-list (keyseqs-list-string)
+(defun shannon-max--keyseqs-to-list (keyseqs-list-string)
+  "Parse KEYSEQS-LIST-STRING into a list.
+
+KEYSEQS-LIST-STRING is a list of quoted key sequences."
   (seq-filter
    (lambda (x) (not (string-blank-p x)))
    (butlast (cdr (split-string keyseqs-list-string "\"")))))
 
 (cl-defstruct shannon-max-command-info command-name freq keyseqs probability)
 (defun shannon-max-extract-to-struct (x)
+  "Build shannon-max data representation from string X.
+
+Used to read in the output of the clojure
+build_analysis_file.clj (can be found on the github
+https://github.com/sstraust/shannonmax)"
   (let ((split-contents (split-string x ",")))
     (make-shannon-max-command-info :command-name (car split-contents)
 		       :freq (string-to-number (cadr split-contents))
-		       :keyseqs (mapcar #'shannon-max-keyseq-to-keylist
-					(shannon-max-keyseqs-to-list (caddr split-contents)))
+		       :keyseqs (mapcar #'shannon-max--keyseq-to-keylist
+					(shannon-max--keyseqs-to-list (caddr split-contents)))
 		       :probability nil)))
 
-(defun shannon-max-total-freq-count (command-freq-input)
+(defun shannon-max--total-freq-count (command-freq-input)
+  "Total number of keypresses in the COMMAND-FREQ-INPUT.
+
+COMMAND-FREQ-INPUT is the analsysis data as a list of
+ `shannon-max-command-info' structs."
   (apply '+ (mapcar #'shannon-max-command-info-freq command-freq-input)))
 
 
 
-(defun shannon-max-filter-filtered-commands (command-freq-input)
+(defun shannon-max--filter-filtered-commands (command-freq-input)
+  "Filter COMMAND-FREQ-INPUT to remove junky commands.
+
+You probably don't want to see commands
+like `insert-char' in your output."
   (seq-filter
    (lambda (x)
      (and (not (member (shannon-max-command-info-command-name x) shannon-max-filtered-commands))
@@ -185,7 +225,11 @@ We also filter all commands matching lambda, or open brackets."
 
   
 
-(defun shannon-max-commands-from-process-output (output-buffer)
+(defun shannon-max--commands-from-process-output (output-buffer)
+  "Read frequency data OUTPUT-BUFFER and produce data for display.
+
+Applies all of the filtering, and
+ computes command probabilities."
   (let ((current-lines '())
 	(command-freqs nil)
 	(total-freq-count nil))
@@ -203,8 +247,8 @@ We also filter all commands matching lambda, or open brackets."
 				      (string-match "," x))
 				    current-lines))
     (setq command-freqs (mapcar #'shannon-max-extract-to-struct current-lines))
-    (setq command-freqs (shannon-max-filter-filtered-commands command-freqs))
-    (setq total-freq-count (shannon-max-total-freq-count command-freqs))
+    (setq command-freqs (shannon-max--filter-filtered-commands command-freqs))
+    (setq total-freq-count (shannon-max--total-freq-count command-freqs))
     (mapc (lambda (x)
 	  (setf (shannon-max-command-info-probability x)
 		(/ (shannon-max-command-info-freq x)
@@ -213,46 +257,83 @@ We also filter all commands matching lambda, or open brackets."
     command-freqs))
 
     
-(defun shannon-max-log2 (x)
+(defun shannon-max--log2 (x)
+  "Compute log X base 2."
   (/ (log x) (log 2)))
 
-(defun shannon-max-command-entropy (command-freqs-input)
+(defun shannon-max--command-entropy (command-freqs-input)
+  "Compute the total entropy of your Emacs usage from COMMAND-FREQS-INPUT."
       (apply '+ (mapcar (lambda (x)
 	  (* -1
 	     (shannon-max-command-info-probability x)
-	     (shannon-max-log2 (shannon-max-command-info-probability x))))
+	     (shannon-max--log2 (shannon-max-command-info-probability x))))
 	command-freqs-input)))
 
 
-(defun shannon-max-keypress-cost (keypress)
+(defun shannon-max--keypress-cost (keypress)
+  "Compute the cost of an individual KEYPRESS.
+
+By default each key you press on your keyboard
+counts as 1 press."
   (if shannon-max-custom-keypress-cost
       (funcall shannon-max-custom-keypress-cost keypress)
     (length (split-string keypress "-"))))
 
-(defun shannon-max-keyseq-cost (keyseq)
-  (apply '+ (mapcar #'shannon-max-keypress-cost keyseq)))
+(defun shannon-max--keyseq-cost (keyseq)
+  "Compute the cost of a KEYSEQ.
+
+It's the sum of all the individual keypresses"
+  (apply '+ (mapcar #'shannon-max--keypress-cost keyseq)))
 
 (defun shannon-max-command-info--actual-keylength (shannon-max-command-info-input)
-  (apply 'min (mapcar #'shannon-max-keyseq-cost (shannon-max-command-info-keyseqs shannon-max-command-info-input))))
+  "The cost of your current keybinding for a SHANNON-MAX-COMMAND-INFO-INPUT.
+
+In the case that multiple keybindings were used
+for the same command, we take the one with the
+lowest cost.
+
+This is actually glossing over some details,
+because:
+- it pulls from your usage data, rather
+  than the current configuration
+- it is not aware of different keylengths
+  for different modes
+- because it uses the history, it still
+  uses the minimum when keys are changed.
+
+it is certainly inaccurate in some cases, but
+I've found it be a reasonable enough estimate
+to be useful."
+  (apply 'min (mapcar #'shannon-max--keyseq-cost (shannon-max-command-info-keyseqs shannon-max-command-info-input))))
 
 (defun shannon-max-command-info--theoretical-keylength (shannon-max-command-info-input)
-  (* -1 (/ (shannon-max-log2 (shannon-max-command-info-probability shannon-max-command-info-input))
-	   (float (shannon-max-log2 shannon-max-alphabet-size)))))
-(defun shannon-max-sort-by (input-list num-func)
+  "Compute theoretical optimum length for SHANNON-MAX-COMMAND-INFO-INPUT.
+
+This is the length that the key command
+would be in an information-optimal config."
+  (* -1 (/ (shannon-max--log2 (shannon-max-command-info-probability shannon-max-command-info-input))
+	   (float (shannon-max--log2 shannon-max-alphabet-size)))))
+(defun shannon-max--sort-by (input-list num-func)
+  "Sort the INPUT-LIST by NUM-FUNC."
   (sort (cl-copy-list input-list)
 	(lambda (x y) (< (apply num-func (list x))
 			 (apply num-func (list y))))))
 
 (defun shannon-max-command-info--shortest-keybinding (shannon-max-command-info-input)
+  "Compute the shortest keybinding used for a SHANNON-MAX-COMMAND-INFO-INPUT.
+
+Shown in the `shannon-max-analyze' display
+to help users understand what the problematic
+keybinding was.  See `shannon-max-command-info--actual-keylength'
+for more detailed info."
   (car
-   (shannon-max-sort-by
+   (shannon-max--sort-by
     (shannon-max-command-info-keyseqs shannon-max-command-info-input)
-    #'shannon-max-keyseq-cost)))
+    #'shannon-max--keyseq-cost)))
 
 
-  
-
-(defun shannon-max-get-results-for-page (commands-list page-access-symbol)
+(defun shannon-max--get-results-for-page (commands-list page-access-symbol)
+  "Display string about COMMANDS-LIST for a specific PAGE-ACCESS-SYMBOL."
   (progn
     (set page-access-symbol (max 0
 				 (min
@@ -266,25 +347,27 @@ We also filter all commands matching lambda, or open brackets."
 		(* (eval page-access-symbol) 10))))))
 
 (defun shannon-max-top-commands-to-shorten (command-freqs-input)
+  "Get commands to shorten from COMMAND-FREQS-INPUT."
   (let* ((filtered-sorted (seq-filter (lambda (x) (> (shannon-max-command-info-freq x) 5))
-		     (shannon-max-sort-by command-freqs-input (lambda (x)
+		     (shannon-max--sort-by command-freqs-input (lambda (x)
 				 (- (shannon-max-command-info--theoretical-keylength x)
 				    (shannon-max-command-info--actual-keylength x)))))))
-    (shannon-max-get-results-for-page
+    (shannon-max--get-results-for-page
      filtered-sorted 'shannon-max-current-results-page-to-shorten)))
 
 
-;; (cl-subseq '(1 2 3) 0 1)
 (defun shannon-max-top-commands-to-lengthen (command-freqs-input)
+  "Get commands to lengthen from COMMAND-FREQS-INPUT."
   (let* ((filtered-sorted
 	 (seq-filter (lambda (x) (> (shannon-max-command-info-freq x) 5))
-		     (shannon-max-sort-by command-freqs-input (lambda (x)
+		     (shannon-max--sort-by command-freqs-input (lambda (x)
 						    (* -1 (- (shannon-max-command-info--theoretical-keylength x)
 							     (shannon-max-command-info--actual-keylength x))))))))
-    (shannon-max-get-results-for-page
+    (shannon-max--get-results-for-page
      filtered-sorted 'shannon-max-current-results-page-to-lengthen)))
     
-(defun shannon-max-table-header ()
+(defun shannon-max--table-header ()
+  "Header string for shannon-max tables."
     (concat "|" "command-name"
 	  "|" "freq"
 	  "|" "prob"
@@ -295,7 +378,8 @@ We also filter all commands matching lambda, or open brackets."
 	  "|<30>|<10>|<10>|<12>|<20>||\n"
 	  "|-\n"))
 
-(defun shannon-max-command-table-str (x)
+(defun shannon-max--command-table-str (x)
+  "Format keyfreq data X into a row of data."
   (concat "|" (shannon-max-command-info-command-name x)
 		    "|" (number-to-string (shannon-max-command-info-freq x))
 		    "|" (format  "%.3f" (shannon-max-command-info-probability x))
@@ -306,7 +390,8 @@ We also filter all commands matching lambda, or open brackets."
 				   (shannon-max-command-info--actual-keylength x)))
 		    "|" "\n"))
 
-(defun shannon-max-instantiate-table ()
+(defun shannon-max--instantiate-table ()
+  "Create an org table for shannon-max to use."
   (save-excursion
     (forward-line -1)
     (move-beginning-of-line nil)
@@ -322,39 +407,49 @@ We also filter all commands matching lambda, or open brackets."
     (org-table-toggle-column-width)
     (forward-line)))
 
-;; (length command-freqs)
 (defun shannon-max-display-shannon-output (command-freqs-input)
+  "Display the shannon max output from COMMAND-FREQS-INPUT."
   (with-current-buffer (get-buffer shannon-max-output-buffer-name)
     (erase-buffer)
-    (insert "Total Commands Logged: " (number-to-string (shannon-max-total-freq-count command-freqs-input)) "\n")
-    (insert "Entropy: " (number-to-string (shannon-max-command-entropy command-freqs-input)) "\n\n\n")
+    (insert "Total Commands Logged: " (number-to-string (shannon-max--total-freq-count command-freqs-input)) "\n")
+    (insert "Entropy: " (number-to-string (shannon-max--command-entropy command-freqs-input)) "\n\n\n")
   (insert "Keybindings that are too long: \n")
-  (insert (shannon-max-table-header))
+  (insert (shannon-max--table-header))
   
-  (mapc (lambda (x) (insert (shannon-max-command-table-str x)))
+  (mapc (lambda (x) (insert (shannon-max--command-table-str x)))
 	  (shannon-max-top-commands-to-shorten command-freqs-input))
-  (shannon-max-instantiate-table)
+  (shannon-max--instantiate-table)
   (insert "\n\n\n\n")
   (insert "Keybindings that are too short: \n")
-  (insert (shannon-max-table-header))
-  (mapc (lambda (x) (insert (shannon-max-command-table-str x)))
+  (insert (shannon-max--table-header))
+  (mapc (lambda (x) (insert (shannon-max--command-table-str x)))
 	  (shannon-max-top-commands-to-lengthen command-freqs-input))
-  (shannon-max-instantiate-table)))
+  (shannon-max--instantiate-table)))
 
 (defun shannon-max-refresh-output ()
-  (shannon-max-display-shannon-output (shannon-max-commands-from-process-output shannon-max-process-buffer)))
+  "Refresh the shannon max output."
+  (shannon-max-display-shannon-output (shannon-max--commands-from-process-output shannon-max-process-buffer)))
 
-(defun shannon-max-page-down-helper (var-to-edit)
+(defun shannon-max--page-down-helper (var-to-edit)
+  "Go down page, and then reload table.
+
+VAR-TO-EDIT represents which page-marker variable
+to modfiy."
   (set var-to-edit (+ 1 (eval var-to-edit)))
   (shannon-max-refresh-output))
 
 
-(defun shannon-max-page-up-helper (var-to-edit)
+(defun shannon-max--page-up-helper (var-to-edit)
+  "Go up page, and then reload table.
+
+VAR-TO-EDIT represents which page-marker variable
+to modify."
   (set var-to-edit (max (+ -1 (eval var-to-edit))
 			0))
   (shannon-max-refresh-output))
 
-(defun shannon-max-get-current-table-selection ()
+(defun shannon-max--get-current-table-selection ()
+  "Check whether cursor is in bottom half of table."
   (if (with-current-buffer (get-buffer shannon-max-output-buffer-name)
 	(search-backward "Keybindings that are too short:" nil 't))
       'shannon-max-current-results-page-to-lengthen
@@ -363,7 +458,8 @@ We also filter all commands matching lambda, or open brackets."
 
 
 
-(defun shannon-max-edit-saving-line-num (func)
+(defun shannon-max--edit-saving-line-num (func)
+  "Edit the buffer using FUNC, saving the current line number."
   (let ((current-line-number (with-current-buffer (get-buffer shannon-max-output-buffer-name)
 			       (count-lines 1 (point)))))
     (funcall func)
@@ -378,16 +474,18 @@ We also filter all commands matching lambda, or open brackets."
   
 
 (defun shannon-max-page-down ()
+  "Scroll down a page of results."
   (interactive)
-  (shannon-max-edit-saving-line-num
-   (lambda () (shannon-max-page-down-helper (shannon-max-get-current-table-selection)))))
+  (shannon-max--edit-saving-line-num
+   (lambda () (shannon-max--page-down-helper (shannon-max--get-current-table-selection)))))
 (defun shannon-max-page-up ()
+  "Scroll up a page of results."
   (interactive)
-  (shannon-max-edit-saving-line-num
-   (lambda () (shannon-max-page-up-helper (shannon-max-get-current-table-selection)))))
+  (shannon-max--edit-saving-line-num
+   (lambda () (shannon-max--page-up-helper (shannon-max--get-current-table-selection)))))
 
 (define-minor-mode shannon-max-mode
-  "Mode for viewing ShannonMax results"
+  "Mode for viewing ShannonMax results."
   :keymap (let ((map (make-sparse-keymap)))
 	    (define-key map (kbd "C-c C-n") #'shannon-max-page-down)
 	    (define-key map (kbd "C-c C-p") #'shannon-max-page-up)
@@ -395,12 +493,14 @@ We also filter all commands matching lambda, or open brackets."
 	    map))
 
 (defun shannon-max--jar-file-already-downloaded-p ()
+  "Check if the shannon-max jar file was already downloaded."
   (and (file-exists-p shannon-max-jar-download-location)
 			  (> (file-attribute-size
 			      (file-attributes shannon-max-jar-download-location))
 			     0)))
 
 (defun shannon-max-download-jar-if-not-present ()
+  "Download the shannon-max jar if not already available."
   (when (and (null shannon-max-jar-file)
 	     (not (null shannon-max--jar-download-path))
 	     (not (null shannon-max-jar-download-location)))
@@ -420,6 +520,17 @@ We also filter all commands matching lambda, or open brackets."
 	     
 
 (defun shannon-max-analyze ()
+  "Analyze your keybindings with shannon-max!
+
+This is the command that analyzes your logged keybindings
+and returns information about which ones are too long or short.
+
+It requires your log file to be populated, meaning you've already
+called (shannon-max-start-logger), typically in a config file,
+and have been using Emacs with the keylogger enabled long enough
+to see interesting results.
+
+This is the main command of the shannon-max package."
   (interactive)
   (progn
     (let ((shannon-max-output-buffer (get-buffer-create shannon-max-output-buffer-name)))
@@ -436,7 +547,7 @@ We also filter all commands matching lambda, or open brackets."
 						   "java" "-jar" shannon-max-jar-file shannon-max-keylog-file-name)
 	(set-process-sentinel (get-process process-name)
 			      (lambda (_process _event)
-				(shannon-max-display-shannon-output (shannon-max-commands-from-process-output shannon-max-process-buffer))))))))
+				(shannon-max-display-shannon-output (shannon-max--commands-from-process-output shannon-max-process-buffer))))))))
 
 
 		
