@@ -93,7 +93,7 @@ We also filter all commands matching lambda, or open brackets."
 (defun shannon-max--set-last-command-info ()
   "Store info about the last-run command in a variable.
 
-Useful so that we can associate 'real-last-command'
+Useful so that we can associate `real-last-command'
 with the stored information."
   (when (and (key-description (this-command-keys-vector))
 	     (not (= (length (key-description (this-command-keys-vector))) 0)))
@@ -150,7 +150,7 @@ can be done in batch."
 (defun shannon-max-start-logger ()
   "Begin shannonmax logging.
 
-Adds the 'shannon-max-logger-log' 'post-command-hook',
+Adds the `shannon-max-logger-log' `post-command-hook',
 and begins autosave."
   (add-hook 'post-command-hook #'shannon-max-logger-log)
   (shannon-max-logger-autosave))
@@ -215,7 +215,7 @@ COMMAND-FREQ-INPUT is the analsysis data as a list of
   "Filter COMMAND-FREQ-INPUT to remove junky commands.
 
 You probably don't want to see commands
-like 'insert-char' in your output."
+like `insert-char' in your output."
   (seq-filter
    (lambda (x)
      (and (not (member (shannon-max-command-info-command-name x) shannon-max-filtered-commands))
@@ -322,9 +322,9 @@ would be in an information-optimal config."
 (defun shannon-max-command-info--shortest-keybinding (shannon-max-command-info-input)
   "Compute the shortest keybinding used for a SHANNON-MAX-COMMAND-INFO-INPUT.
 
-Shown in the 'shannon-max-analyze' display
+Shown in the `shannon-max-analyze' display
 to help users understand what the problematic
-keybinding was.  See 'shannon-max-command-info--actual-keylength'
+keybinding was.  See `shannon-max-command-info--actual-keylength'
 for more detailed info."
   (car
    (shannon-max--sort-by
