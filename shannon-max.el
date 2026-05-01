@@ -108,7 +108,7 @@ with the stored information."
 
 
 (defun shannon-max-logger-log ()
-  "Log an command-entered event to shannon-max.
+  "Log a command-entered event to shannon-max.
 
 Store in a variable so that saving
 can be done in batch."
