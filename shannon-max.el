@@ -1,11 +1,12 @@
 ;;; shannon-max.el --- Analyze your keybindings with information theory -*- lexical-binding: t -*-
 
-;; Copyright (C) 2024 Sam Strus
+;; Copyright (C) 2024 Sam Straus
 
 ;; Author: Sam Straus <sam_straus@alumni.brown.edu>
 ;; URL: https://github.com/sstraust/shannonmax
 ;; Version: 0.1.1
 ;; Package-Requires: ((emacs "29.1"))
+;; SPDX-License-Identifier: Apache-2.0
 
 ;;; Commentary:
 
