@@ -1,17 +1,20 @@
 ;;; shannon-max.el --- Analyze your keybindings with information theory -*- lexical-binding: t -*-
 
-;; Copyright (C) 2024 Sam Strus
+;; Copyright (C) 2024 Sam Straus
 
 ;; Author: Sam Straus <sam_straus@alumni.brown.edu>
 ;; URL: https://github.com/sstraust/shannonmax
 ;; Version: 0.1.1
 ;; Package-Requires: ((emacs "29.1"))
+;; SPDX-License-Identifier: Apache-2.0
 
 ;;; Commentary:
 
-;; Uses information theory to analyze your Emacs usage and suggest better keybindings.
+;; Uses information theory to analyze your Emacs usage
+;; and suggest better keybindings.
 
-;; Add (shannon-max-start-logger) to your .emacs configuration file to start collecting logs.
+;; Add (shannon-max-start-logger) to your .emacs
+;; configuration file to start collecting logs.
 ;; Once you have enough data, call M-x shannon-max-analyze to see the results.
 
 ;; See the project readme for more detailed instructions.
@@ -206,7 +209,7 @@ https://github.com/sstraust/shannonmax)"
 
 COMMAND-FREQ-INPUT is the analsysis data as a list of
  `shannon-max-command-info' structs."
-  (apply '+ (mapcar #'shannon-max-command-info-freq command-freq-input)))
+  (apply #'+ (mapcar #'shannon-max-command-info-freq command-freq-input)))
 
 
 
@@ -262,7 +265,7 @@ Applies all of the filtering, and
 
 (defun shannon-max--command-entropy (command-freqs-input)
   "Compute the total entropy of your Emacs usage from COMMAND-FREQS-INPUT."
-      (apply '+ (mapcar (lambda (x)
+      (apply #'+ (mapcar (lambda (x)
 	  (* -1
 	     (shannon-max-command-info-probability x)
 	     (shannon-max--log2 (shannon-max-command-info-probability x))))
@@ -282,7 +285,7 @@ counts as 1 press."
   "Compute the cost of a KEYSEQ.
 
 It's the sum of all the individual keypresses"
-  (apply '+ (mapcar #'shannon-max--keypress-cost keyseq)))
+  (apply #'+ (mapcar #'shannon-max--keypress-cost keyseq)))
 
 (defun shannon-max-command-info--actual-keylength (shannon-max-command-info-input)
   "The cost of your current keybinding for a SHANNON-MAX-COMMAND-INFO-INPUT.
@@ -303,7 +306,7 @@ because:
 it is certainly inaccurate in some cases, but
 I've found it be a reasonable enough estimate
 to be useful."
-  (apply 'min (mapcar #'shannon-max--keyseq-cost (shannon-max-command-info-keyseqs shannon-max-command-info-input))))
+  (apply #'min (mapcar #'shannon-max--keyseq-cost (shannon-max-command-info-keyseqs shannon-max-command-info-input))))
 
 (defun shannon-max-command-info--theoretical-keylength (shannon-max-command-info-input)
   "Compute theoretical optimum length for SHANNON-MAX-COMMAND-INFO-INPUT.
@@ -501,8 +504,8 @@ to modify."
 (defun shannon-max-download-jar-if-not-present ()
   "Download the shannon-max jar if not already available."
   (when (and (null shannon-max-jar-file)
-	     (not (null shannon-max--jar-download-path))
-	     (not (null shannon-max-jar-download-location)))
+	     shannon-max--jar-download-path
+	     shannon-max-jar-download-location)
     (if (shannon-max--jar-file-already-downloaded-p)
 	(setq shannon-max-jar-file shannon-max-jar-download-location)
       (if (y-or-n-p (concat "Download shanon-max-jar to " shannon-max-jar-download-location "? (necessary to parse your keyfreqs file):"))
